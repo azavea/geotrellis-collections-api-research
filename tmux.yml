@@ -1,0 +1,7 @@
+name: geotrellis-research
+root: .
+
+windows:
+  - geotrellis-research:
+  - server: rake build && rake server
+  - logs:
