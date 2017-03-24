@@ -9,6 +9,7 @@ end
 desc "Run servers"
 task :server do
     puts "Starting servers ->"
+    sh "docker-compose up"
 end
 
 desc "Configure Tmuxinator"
