@@ -4,6 +4,8 @@ import org.scalatra._
 import org.scalatra.CorsSupport
 import org.scalatra.json._
 import org.json4s.{DefaultFormats, Formats}
+import geotrellis.raster._
+import geotrellis.raster.mapalgebra.focal._
 
 case class AreaOfInterest(`type`: String, geometry: Object, properties: Object)
 
@@ -24,12 +26,27 @@ class GeoTrellisAPIServlet extends Geotrellis_collections_apiStack with JacksonJ
   }
 
   get("/") {
-    Ok("Post a shape to `/geojson`!", this.headers)
+    Ok("Post a shape to `/geojson` or make a GET request to `/helloraster`!", this.headers)
   }
 
   post("/geojson") {
     val aoi = parsedBody.extract[AreaOfInterest]
     Ok(aoi, this.headers)
+  }
+
+  get("/helloraster") {
+    // from the Hello, Raster! example here:
+    // http://geotrellis.readthedocs.io/en/latest/
+
+    val nd = NODATA
+    val input = Array[Int](
+      nd, 7, 1, 1,  3, 5, 9, 8, 2,
+      9, 1, 1, 2,  2, 2, 4, 3, 5,
+      3, 8, 1, 3,  3, 3, 1, 2, 2,
+      2, 4, 7, 1, nd, 1, 8, 4, 3)
+    val iat = IntArrayTile(input, 9, 4)
+
+    Ok(iat.asciiDraw(), this.headers)
   }
 
 }

@@ -14,7 +14,7 @@ name := "geotrellis_collections_api"
 
 version := "0.1.0-SNAPSHOT"
 
-scalaVersion := "2.12.1"
+scalaVersion := "2.11.8"
 
 resolvers += Classpaths.typesafeReleases
 
@@ -26,7 +26,8 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.1.5" % "runtime",
   "org.eclipse.jetty" % "jetty-webapp" % "9.2.15.v20160210" % "container",
   "javax.servlet" % "javax.servlet-api" % "3.1.0" % "provided",
-  "org.json4s"   %% "json4s-jackson" % "3.5.0"
+  "org.json4s"   %% "json4s-jackson" % "3.5.0",
+  "org.locationtech.geotrellis" %% "geotrellis-raster" % "1.1.0-RC2"
 )
 
 scalateTemplateConfig in Compile := {
