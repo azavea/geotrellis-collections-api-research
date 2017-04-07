@@ -1,5 +1,10 @@
 import axios from 'axios';
 
+import {
+    apiServerURL,
+    postRequestOptions,
+} from '../constants';
+
 export const START_SUBMIT_AOI = 'START_SUBMIT_AOI';
 export const COMPLETE_SUBMIT_AOI = 'COMPLETE_SUBMIT_AOI';
 export const FAIL_SUBMIT_AOI = 'FAIL_SUBMIT_AOI';
@@ -34,9 +39,8 @@ function failSubmitAreaOfInterest() {
 export function submitAreaOfInterest(aoi) {
     return (dispatch) => {
         dispatch(startSubmitAreaOfInterest(aoi));
-        // TODO: Make real request
-        axios.get('http://localhost:9555')
-             .then(({ headers }) => dispatch(completeSubmitAreaOfInterest(headers.date)))
+        axios.post(apiServerURL, JSON.stringify(aoi), postRequestOptions)
+             .then(({ data }) => dispatch(completeSubmitAreaOfInterest(data)))
              .catch(() => dispatch(failSubmitAreaOfInterest()));
     };
 }

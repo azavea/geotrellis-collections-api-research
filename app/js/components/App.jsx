@@ -11,7 +11,10 @@ class App extends Component {
     render() {
         return (
             <div>
-                <Map dispatch={this.props.dispatch} />
+                <Map
+                    data={this.props.appPage.data}
+                    dispatch={this.props.dispatch}
+                />
             </div>
         );
     }

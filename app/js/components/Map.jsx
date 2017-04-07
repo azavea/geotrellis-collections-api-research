@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Map as ReactLeafletMap, TileLayer, FeatureGroup } from 'react-leaflet';
+import Control from 'react-leaflet-control';
 import { EditControl } from 'react-leaflet-draw';
 import { forEach } from 'lodash';
 
@@ -43,6 +44,15 @@ export default class Map extends Component {
     }
 
     render() {
+        const { data } = this.props;
+        const dataVizControl = data ? (
+            <Control position="bottomleft">
+                <div id="data-viz-control">
+                    {JSON.stringify(data)}
+                </div>
+            </Control>
+        ) : null;
+
         return (
             <ReactLeafletMap
                 center={defaultMapCenter}
@@ -71,11 +81,13 @@ export default class Map extends Component {
                         }}
                     />
                 </FeatureGroup>
+                {dataVizControl}
             </ReactLeafletMap>
         );
     }
 }
 
 Map.propTypes = {
+    data: PropTypes.object,
     dispatch: PropTypes.func.isRequired,
 };
