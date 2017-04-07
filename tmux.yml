@@ -2,6 +2,7 @@ name: geotrellis-research
 root: .
 
 windows:
-  - geotrellis-research:
-  - server: rake build && rake server
+  - geotrellis-research: rake build
+  - app-server:
+  - api-server:
   - logs:
