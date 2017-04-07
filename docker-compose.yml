@@ -14,6 +14,8 @@ services:
         build:
             context: ./api
             dockerfile: Dockerfile
+        volumes:
+            - ./api/geotrellis_collections_api:/usr/src
         ports:
             - "7000:7000"
         command: ./sbt "~;jetty:stop;jetty:start"

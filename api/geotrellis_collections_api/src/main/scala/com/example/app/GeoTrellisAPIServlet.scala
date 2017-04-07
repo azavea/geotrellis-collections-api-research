@@ -13,4 +13,12 @@ class GeoTrellisAPIServlet extends Geotrellis_collections_apiStack {
     </html>
   }
 
+  get("/geojson") {
+   <html>
+       <body>
+           hello!
+       </body>
+   </html>
+  }
+
 }
