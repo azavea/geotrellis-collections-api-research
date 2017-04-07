@@ -10,3 +10,10 @@ services:
             - ~/.node_cache/geotrellis-collections-api-research-node-modules:/usr/src/app/node_modules
         command:
             npm start
+    api:
+        build:
+            context: ./api
+            dockerfile: Dockerfile
+        ports:
+            - "7000:7000"
+        command: ./sbt "~;jetty:stop;jetty:start"

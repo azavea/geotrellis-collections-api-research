@@ -41,5 +41,7 @@ This will start servers to run the app on port `9555` and the API on port `7000`
 | Command | Description |
 | --- | --- |
 | `rake build` | Build project containers |
+| `rake console app` | Log into app container shell |
+| `rake console api` | Log into API container shell |
 | `rake server` | Start servers |
 | `rake tmux` | Setup project Tmuxinator configuration |
