@@ -31,7 +31,32 @@ class GeoTrellisAPIServlet extends Geotrellis_collections_apiStack with JacksonJ
 
   post("/geojson") {
     val aoi = parsedBody.extract[AreaOfInterest]
-    Ok(aoi, this.headers)
+    Ok(aoi.geometry, this.headers)
+  }
+
+  post("/localvariety") {
+    val res = "Placeholder for local variety op response."
+    Ok(res, this.headers)
+  }
+
+  post("/focalstandarddeviation") {
+    var res = "Placeholder for focal standard deviation op response."
+    Ok(res, this.headers)
+  }
+
+  post("/zonalhistogram") {
+    var res = "Placeholder for zonal histogram op response."
+    Ok(res, this.headers)
+  }
+
+  post("/pngtile" {
+    var res = "Placeholder for png tile generation op response"
+    Ok(res, this.headers)
+  }
+
+  post("/geotiff") {
+    var res = "Placeholder for GeoTIFF generation op response"
+    Ok(res, this.headers)
   }
 
   get("/helloraster") {

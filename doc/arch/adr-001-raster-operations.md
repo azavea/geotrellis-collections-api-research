@@ -146,14 +146,31 @@ GeoTrellis package: [geotrellis.io.mapalgebra.zonal](https://geotrellis.github.i
 
 ## Decision
 
-As I'm implementing the API endpoints for [this issue](https://github.com/azavea/geotrellis-collections-api-research/issues/5), I'm going to attempt to include these three along with some performing GeoTrellis ops not included in the catalog here:
+After reading through this catalog and checking the GeoTrellis docs, I'm going to attempt to include these endpoints for these three operations as I'm implementing the API for [this issue](https://github.com/azavea/geotrellis-collections-api-research/issues/5):
 
-- Local variety
-- Focal ranking
-- Zonal combination
+- [Local variety](https://github.com/locationtech/geotrellis/blob/master/raster/src/main/scala/geotrellis/raster/mapalgebra/local/Variety.scala)
+- [Focal standard deviation](https://github.com/locationtech/geotrellis/blob/master/raster/src/main/scala/geotrellis/raster/mapalgebra/focal/StandardDeviation.scala)
+- [Zonal histogram](https://github.com/locationtech/geotrellis/blob/master/raster/src/main/scala/geotrellis/raster/mapalgebra/zonal/ZonalHistograms.scala)
 
-I'll read through the GeoTrellis docs and write a follow-up blog post as part of deciding on additional endpoints.
+While these GeoTrellis ops don't map precisely onto those catalogued above, they're documented GeoTrellis capabilities.
+
+Along with those endpoints for those ops, I'm going to try writing two additional endpoints:
+
+- an endpoint to generate PNG tiles with color ramps as [documented here](http://geotrellis.readthedocs.io/en/latest/guide/rasters.html)
+- an endpoint to write data out as a GeoTIFF which seems to be available via the [GeoTiffWriter module](https://github.com/locationtech/geotrellis/blob/master/raster/src/main/scala/geotrellis/raster/io/geotiff/writer/GeoTiffWriter.scala)
+
+Here are five API endpoints I'm going to implement:
+
+| Path | Service |
+| --- | --- |
+| [/localvariety](http://localhost:7000/localvariety) | Returns local variety results |
+| [/focalstandarddeviation](http://localhost:7000/focalstandarddeviation) | Returns focal standard deviation results |
+| [/zonalhistogram](http://localhost:7000/zonalhistogram) | Returns zonal histogram results |
+| [/pngtile](http://localhost:7000/pngtile) | Returns a PNG tile fit to the shape |
+| [/geotiff](http://localhost:7000/geotiff) | Returns a GeoTIFF for the drawn shape along with Raster data |
+
+Each will accept GeoJSON POSTed from the client.
 
 ## Consequences
 
-One upcoming issue for my research project is to [choose some rasters to use in the project](https://github.com/azavea/geotrellis-collections-api-research/issues/4); as I'm doing so, I'll keep in mind whether there are data sets which may be more or less interesting for the local variety, focal ranking, and zonal combination ops.
+One upcoming issue for my research project is to [choose some rasters to use in the project](https://github.com/azavea/geotrellis-collections-api-research/issues/4); as I'm doing so, I'll keep in mind whether there are data sets which may be more or less interesting for the local variety, focal standard deviation, and zonal histogram ops.
