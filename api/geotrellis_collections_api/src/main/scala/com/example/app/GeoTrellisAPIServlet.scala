@@ -49,7 +49,7 @@ class GeoTrellisAPIServlet extends Geotrellis_collections_apiStack with JacksonJ
     Ok(res, this.headers)
   }
 
-  post("/pngtile" {
+  post("/pngtile") {
     var res = "Placeholder for png tile generation op response"
     Ok(res, this.headers)
   }
