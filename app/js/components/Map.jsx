@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Map as ReactLeafletMap, TileLayer, FeatureGroup } from 'react-leaflet';
 import Control from 'react-leaflet-control';
 import { EditControl } from 'react-leaflet-draw';
-import { forEach } from 'lodash';
+import { forEach, isEqual } from 'lodash';
 
 import {
     submitAreaOfInterest,
@@ -33,6 +33,11 @@ export default class Map extends Component {
                 });
             }
         });
+    }
+
+    shouldComponentUpdate({ data: nextData }) {
+        const { data: oldData } = this.props;
+        return nextData && oldData ? !isEqual(nextData, oldData) : (nextData || oldData);
     }
 
     onCreate({ layer }) {

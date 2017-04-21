@@ -4,15 +4,15 @@ import { connect } from 'react-redux';
 import Map from './Map.jsx';
 
 class App extends Component {
-    componentWillReceiveProps(nextProps) {
-        window.console.log(nextProps.appPage);
+    componentWillReceiveProps({ data }) {
+        window.console.log(data);
     }
 
     render() {
         return (
             <div>
                 <Map
-                    data={this.props.appPage.data}
+                    data={this.props.data}
                     dispatch={this.props.dispatch}
                 />
             </div>
@@ -22,12 +22,16 @@ class App extends Component {
 
 App.propTypes = {
     dispatch: PropTypes.func.isRequired,
-    appPage: PropTypes.object.isRequired,
+    aoi: PropTypes.object,
+    data: PropTypes.object,
+    fetching: PropTypes.bool,
 };
 
-function mapStateToProps({ appPage }) {
+function mapStateToProps({ appPage: { aoi, data, fetching } }) {
     return {
-        appPage,
+        aoi,
+        data,
+        fetching,
     };
 }
 
