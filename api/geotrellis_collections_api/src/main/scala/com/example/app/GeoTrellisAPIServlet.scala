@@ -25,8 +25,16 @@ class GeoTrellisAPIServlet extends Geotrellis_collections_apiStack with JacksonJ
     Ok(request, this.headers)
   }
 
-  get("/") {
-    Ok("Post a shape to `/geojson` or make a GET request to `/helloraster`!", this.headers)
+  get("*") {
+    val res: String = """
+      POST GeoJSON shapes to:
+      /localvariety
+      /focalstandarddeviation
+      /zonalhistogram
+      /pngtile
+      /geotiff
+    """.stripMargin
+    Ok(res, this.headers)
   }
 
   post("/geojson") {
@@ -57,21 +65,6 @@ class GeoTrellisAPIServlet extends Geotrellis_collections_apiStack with JacksonJ
   post("/geotiff") {
     var res = "Placeholder for GeoTIFF generation op response"
     Ok(res, this.headers)
-  }
-
-  get("/helloraster") {
-    // from the Hello, Raster! example here:
-    // http://geotrellis.readthedocs.io/en/latest/
-
-    val nd = NODATA
-    val input = Array[Int](
-      nd, 7, 1, 1,  3, 5, 9, 8, 2,
-      9, 1, 1, 2,  2, 2, 4, 3, 5,
-      3, 8, 1, 3,  3, 3, 1, 2, 2,
-      2, 4, 7, 1, nd, 1, 8, 4, 3)
-    val iat = IntArrayTile(input, 9, 4)
-
-    Ok(iat.asciiDraw(), this.headers)
   }
 
 }
