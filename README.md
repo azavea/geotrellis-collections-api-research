@@ -2,6 +2,8 @@
 
 A research project to set up and use GeoTrellis as a REST service.
 
+![current demo](demo.gif)
+
 ### Requirements
 
 * Docker
