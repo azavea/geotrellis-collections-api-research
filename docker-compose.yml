@@ -20,4 +20,4 @@ services:
         ports:
             - "7000:7000"
         command:
-            ./sbt run
+            ./sbt ~reStart
