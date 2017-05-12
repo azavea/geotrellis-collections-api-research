@@ -6,6 +6,7 @@ import org.scalatra.json._
 import org.json4s.{DefaultFormats, Formats}
 import geotrellis.raster._
 import geotrellis.raster.mapalgebra.focal._
+import geotrellis.vector._
 
 case class AreaOfInterest(`type`: String, geometry: Object, properties: Object)
 
