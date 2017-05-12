@@ -23,7 +23,7 @@ class App extends Component {
 App.propTypes = {
     dispatch: PropTypes.func.isRequired,
     aoi: PropTypes.object,
-    data: PropTypes.object,
+    data: PropTypes.string,
     fetching: PropTypes.bool,
 };
 

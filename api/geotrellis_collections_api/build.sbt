@@ -1,49 +1,30 @@
-import org.scalatra.sbt._
-import org.scalatra.sbt.PluginKeys._
-import ScalateKeys._
-
-val ScalatraVersion = "2.5.0"
-
-ScalatraPlugin.scalatraSettings
-
-scalateSettings
-
-organization := "com.example"
+enablePlugins(JavaAppPackaging)
 
 name := "geotrellis_collections_api"
-
-version := "0.1.0-SNAPSHOT"
-
+organization := ""
+version := "1.0"
 scalaVersion := "2.11.8"
 
-resolvers += Classpaths.typesafeReleases
+scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
 
-libraryDependencies ++= Seq(
-  "org.scalatra" %% "scalatra" % ScalatraVersion,
-  "org.scalatra" %% "scalatra-scalate" % ScalatraVersion,
-  "org.scalatra" %% "scalatra-specs2" % ScalatraVersion % "test",
-  "org.scalatra" %% "scalatra-json" % ScalatraVersion,
-  "ch.qos.logback" % "logback-classic" % "1.1.5" % "runtime",
-  "org.eclipse.jetty" % "jetty-webapp" % "9.2.15.v20160210" % "container",
-  "javax.servlet" % "javax.servlet-api" % "3.1.0" % "provided",
-  "org.json4s"   %% "json4s-jackson" % "3.5.0",
-  "org.locationtech.geotrellis" %% "geotrellis-raster" % "1.1.0-RC2",
-  "org.locationtech.geotrellis" %% "geotrellis-vector" % "1.1.0-RC2"
-)
-
-scalateTemplateConfig in Compile := {
-  val base = (sourceDirectory in Compile).value
+libraryDependencies ++= {
+  val akkaV       = "2.4.16"
+  val akkaHttpV   = "10.0.1"
+  val scalaTestV  = "3.0.1"
   Seq(
-    TemplateConfig(
-      base / "webapp" / "WEB-INF" / "templates",
-      Seq.empty,  /* default imports should be added here */
-      Seq(
-        Binding("context", "_root_.org.scalatra.scalate.ScalatraRenderContext", importMembers = true, isImplicit = true)
-      ),  /* add extra bindings here */
-      Some("templates")
-    )
+    "com.typesafe.akka" %% "akka-actor" % akkaV,
+    "com.typesafe.akka" %% "akka-stream" % akkaV,
+    "com.typesafe.akka" %% "akka-testkit" % akkaV,
+    "com.typesafe.akka" %% "akka-http" % akkaHttpV,
+    "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpV,
+    "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpV,
+    "org.scalatest"     %% "scalatest" % scalaTestV % "test",
+    "org.locationtech.geotrellis" %% "geotrellis-raster" % "1.1.0-RC2",
+    "org.locationtech.geotrellis" %% "geotrellis-vector" % "1.1.0-RC2",
+    "org.locationtech.geotrellis" %% "geotrellis-spark" % "1.1.0-RC2",
+    "org.apache.spark" %% "spark-core" % "2.1.1",
+    "ch.megard" %% "akka-http-cors" % "0.2.1"
   )
 }
 
-enablePlugins(JettyPlugin)
-containerPort in Jetty := 7000
+Revolver.settings

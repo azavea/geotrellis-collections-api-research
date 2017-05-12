@@ -53,7 +53,7 @@ export default class Map extends Component {
         const dataVizControl = data ? (
             <Control position="bottomleft">
                 <div id="data-viz-control">
-                    {JSON.stringify(data)}
+                    {data}
                 </div>
             </Control>
         ) : null;
@@ -93,6 +93,6 @@ export default class Map extends Component {
 }
 
 Map.propTypes = {
-    data: PropTypes.object,
+    data: PropTypes.string,
     dispatch: PropTypes.func.isRequired,
 };

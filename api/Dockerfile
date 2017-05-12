@@ -10,4 +10,4 @@ EXPOSE 7000
 
 WORKDIR /usr/src
 
-RUN ./sbt
+RUN ./sbt compile
