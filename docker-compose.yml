@@ -1,7 +1,7 @@
 version: '2'
 services:
     app:
-        image: node:6.9
+        image: node:6.10.3
         working_dir: /usr/src/app
         ports:
             - "9555:9555"
@@ -9,13 +9,15 @@ services:
             - ./app:/usr/src/app
             - ~/.node_cache/geotrellis-collections-api-research-node-modules:/usr/src/app/node_modules
         command:
-            npm start
+            yarn run start
     api:
         build:
             context: ./api
             dockerfile: Dockerfile
         volumes:
             - ./api/geotrellis_collections_api:/usr/src
+            - ./data:/usr/data
         ports:
             - "7000:7000"
-        command: ./sbt "~;jetty:stop;jetty:start"
+        command:
+            ./sbt "~;jetty:stop;jetty:start"

@@ -11,7 +11,8 @@
   "main": "Main.jsx",
   "scripts": {
     "start": "node_modules/.bin/webpack-dev-server --hot --progress --colors --host 0.0.0.0 --port 9555",
-    "test": "echo not implemented"
+    "test": "echo not implemented",
+    "postinstall": "npm rebuild node-sass --quiet"
   },
   "license": "MIT",
   "dependencies": {

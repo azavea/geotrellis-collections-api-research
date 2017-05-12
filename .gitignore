@@ -1,4 +1,5 @@
 node_modules
+dist
 
 ## generic files to ignore
 *~
@@ -68,4 +69,4 @@ jrebel.lic
 .idea
 
 # paulp script
-/.lib/
+.lib/
