@@ -6,8 +6,3 @@ export const attribution = 'Map tiles by <a href="https://stamen.com">Stamen Des
     '<a href="https://creativecommons.org/licenses/by/3.0">CC-BY-3.0</a> &mdash;' +
     'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
 export const apiServerURL = 'http://localhost:7000/geojson';
-export const postRequestOptions = {
-    headers: {
-        'Content-Type': 'application/json',
-    },
-};
