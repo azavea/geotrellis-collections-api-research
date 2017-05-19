@@ -5,4 +5,4 @@ export const tiles = 'https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y
 export const attribution = 'Map tiles by <a href="https://stamen.com">Stamen Design</a>,' +
     '<a href="https://creativecommons.org/licenses/by/3.0">CC-BY-3.0</a> &mdash;' +
     'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
-export const apiServerURL = 'http://localhost:7000/geojson';
+export const apiServerURL = 'http://localhost:7000/pngtile';
