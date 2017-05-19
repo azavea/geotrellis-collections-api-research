@@ -3,9 +3,13 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
+import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
+import spray.json._
+import spray.json.DefaultJsonProtocol._
 import scala.io.StdIn
 import geotrellis.raster._
 import geotrellis.vector._
+import geotrellis.vector.io._
 import geotrellis.spark._
 import org.apache.spark.rdd.RDD
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
@@ -15,8 +19,6 @@ object GeoTrellisAPIServer {
 
     implicit val system = ActorSystem("my-system")
     implicit val materializer = ActorMaterializer()
-    // needed for the future flatMap/onComplete in the end
-    implicit val executionContext = system.dispatcher
 
     val route = cors() {
       get {
@@ -51,7 +53,10 @@ object GeoTrellisAPIServer {
             """.stripMargin)
         } ~
         path("geojson") {
-          complete("You posted geojson")
+          entity(as[String]) { str =>
+            val polygon = str.stripMargin.parseGeoJson[Polygon]
+            complete(polygon.toString)
+          }
         }
       }
     }
