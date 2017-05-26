@@ -22,6 +22,7 @@ libraryDependencies ++= {
     "org.locationtech.geotrellis" %% "geotrellis-raster" % "1.1.0-RC2",
     "org.locationtech.geotrellis" %% "geotrellis-vector" % "1.1.0-RC2",
     "org.locationtech.geotrellis" %% "geotrellis-spark" % "1.1.0-RC2",
+    "org.locationtech.geotrellis" %% "geotrellis-s3" % "1.1.0-RC2",
     "org.apache.spark" %% "spark-core" % "2.1.1",
     "ch.megard" %% "akka-http-cors" % "0.2.1"
   )
