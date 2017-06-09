@@ -24,13 +24,18 @@ class App extends Component {
             props: {
                 data,
                 dispatch,
+                selectedApiEndpoint,
             },
             state: {
                 panelVisible,
             },
         } = this;
 
-        const panel = panelVisible ? <Panel /> : null;
+        const panel = panelVisible ? (
+            <Panel
+                dispatch={dispatch}
+                selectedApiEndpoint={selectedApiEndpoint}
+            />) : null;
 
         const mapViewCSS = panelVisible ? 'map-with-panel' : 'full-screen-map';
 
@@ -57,13 +62,18 @@ App.propTypes = {
     aoi: PropTypes.object,
     data: PropTypes.string,
     fetching: PropTypes.bool,
+    selectedApiEndpoint: PropTypes.string.isRequired,
 };
 
-function mapStateToProps({ appPage: { aoi, data, fetching } }) {
+function mapStateToProps({
+    appPage: {
+        aoi, data, fetching, selectedApiEndpoint,
+} }) {
     return {
         aoi,
         data,
         fetching,
+        selectedApiEndpoint,
     };
 }
 

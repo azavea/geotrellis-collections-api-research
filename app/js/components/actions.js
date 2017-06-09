@@ -8,6 +8,7 @@ export const START_SUBMIT_AOI = 'START_SUBMIT_AOI';
 export const COMPLETE_SUBMIT_AOI = 'COMPLETE_SUBMIT_AOI';
 export const FAIL_SUBMIT_AOI = 'FAIL_SUBMIT_AOI';
 export const CLEAR_AOI = 'CLEAR_AOI';
+export const CHANGE_API_ENDPOINT = 'CHANGE_API_ENDPOINT';
 
 let cancelAxiosRequest = null;
 
@@ -46,9 +47,10 @@ function failSubmitAreaOfInterest() {
 
 export function submitAreaOfInterest(aoi) {
     cancelPriorRequest();
-    return (dispatch) => {
+    return (dispatch, getState) => {
         dispatch(startSubmitAreaOfInterest(aoi));
-        axios.post(apiServerURL, JSON.stringify(aoi), {
+        const { appPage: { selectedApiEndpoint } } = getState();
+        axios.post(`${apiServerURL}${selectedApiEndpoint}`, JSON.stringify(aoi), {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -56,5 +58,12 @@ export function submitAreaOfInterest(aoi) {
         })
              .then(({ data }) => dispatch(completeSubmitAreaOfInterest(data)))
              .catch(() => dispatch(failSubmitAreaOfInterest()));
+    };
+}
+
+export function changeApiEndpoint(payload) {
+    return {
+        type: CHANGE_API_ENDPOINT,
+        payload,
     };
 }

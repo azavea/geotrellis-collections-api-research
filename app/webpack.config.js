@@ -54,7 +54,6 @@ module.exports = {
             filename: '[file].map',
         }),
         new HtmlWebpackPlugin({
-            title: 'react-leaflet-pouchdb',
             filename: 'index.html',
             template: 'template.html'
         }),

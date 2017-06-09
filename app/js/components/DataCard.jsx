@@ -1,5 +1,4 @@
-import React from 'react';
-import { string } from 'prop-types';
+import React, { PropTypes } from 'react';
 import Control from 'react-leaflet-control';
 
 export default function DataCard({
@@ -23,5 +22,5 @@ export default function DataCard({
 }
 
 DataCard.propTypes = {
-    data: string.isRequired,
+    data: PropTypes.string.isRequired,
 };

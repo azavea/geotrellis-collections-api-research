@@ -5,4 +5,11 @@ export const tiles = 'http://{s}.tile.openstreetmap.se/hydda/base/{z}/{x}/{y}.pn
 export const attribution = `Tiles courtesy of <a href="http://openstreetmap.se/"
     target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy;
     <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>`;
-export const apiServerURL = 'http://localhost:7000/pngtile';
+export const apiServerURL = 'http://localhost:7000';
+export const apiEndpoints = [
+    '/localvariety',
+    '/focalstandarddeviation',
+    '/zonalhistogram',
+    '/pngtile',
+    '/geotiff',
+];

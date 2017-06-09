@@ -1,7 +1,22 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
-export default function Panel() {
+import RequestOptionsMenu from './RequestOptionsMenu';
+
+export default function Panel({
+    dispatch,
+    selectedApiEndpoint,
+}) {
     return (
-        <div />
+        <div id="data-viz-panel">
+            <RequestOptionsMenu
+                dispatch={dispatch}
+                selectedApiEndpoint={selectedApiEndpoint}
+            />
+        </div>
     );
 }
+
+Panel.propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    selectedApiEndpoint: PropTypes.string.isRequired,
+};

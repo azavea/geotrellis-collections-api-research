@@ -1,5 +1,4 @@
-import React from 'react';
-import { bool, func } from 'prop-types';
+import React, { PropTypes } from 'react';
 
 export default function Header({
     panelVisible,
@@ -32,6 +31,6 @@ export default function Header({
 }
 
 Header.propTypes = {
-    panelVisible: bool.isRequired,
-    togglePanel: func.isRequired,
+    panelVisible: PropTypes.bool.isRequired,
+    togglePanel: PropTypes.func.isRequired,
 };

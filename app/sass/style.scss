@@ -33,3 +33,11 @@
     bottom: 2.5rem !important;
     position: fixed !important;
 }
+
+#data-viz-panel {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    width: 40%;
+    height: calc(100vh - 50px);
+}
