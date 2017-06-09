@@ -1,7 +1,7 @@
 version: '2'
 services:
     app:
-        image: node:6.10.3
+        image: node:8.1
         working_dir: /usr/src/app
         ports:
             - "9555:9555"
