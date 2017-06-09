@@ -100,6 +100,8 @@ module.exports = {
         historyApiFallback: {
             index: '/',
         },
+        disableHostCheck: true,
+        host: '0.0.0.0',
     },
     resolve: {
         extensions: ['.js', '.jsx'],
