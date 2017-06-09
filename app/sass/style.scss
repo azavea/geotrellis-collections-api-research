@@ -7,14 +7,6 @@
     display: none;
 }
 
-#data-viz-control {
-    background-color: white;
-    font-size: 1rem;
-    width: 20rem;
-    margin: 1rem;
-    word-wrap: break-word;
-}
-
 #full-screen-map {
     height: calc(100vh - 50px);
     position: fixed;
@@ -34,4 +26,10 @@
 #header-link {
     color: white;
     text-decoration: none;
+}
+
+#centroid-viz-control {
+    left: 2.5rem !important;
+    bottom: 2.5rem !important;
+    position: fixed !important;
 }

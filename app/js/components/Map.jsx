@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { Map as ReactLeafletMap, TileLayer, FeatureGroup } from 'react-leaflet';
-import Control from 'react-leaflet-control';
 import { EditControl } from 'react-leaflet-draw';
 import { forEach, isEqual } from 'lodash';
 
@@ -15,6 +14,8 @@ import {
     tiles,
     attribution,
 } from '../constants';
+
+import DataCard from './DataCard';
 
 export default class Map extends Component {
     constructor(props) {
@@ -50,13 +51,7 @@ export default class Map extends Component {
 
     render() {
         const { data } = this.props;
-        const dataVizControl = data ? (
-            <Control position="bottomleft">
-                <div id="data-viz-control">
-                    {data}
-                </div>
-            </Control>
-        ) : null;
+        const dataCard = data ? <DataCard data={data} /> : null;
 
         return (
             <ReactLeafletMap
@@ -86,7 +81,7 @@ export default class Map extends Component {
                         }}
                     />
                 </FeatureGroup>
-                {dataVizControl}
+                {dataCard}
             </ReactLeafletMap>
         );
     }
