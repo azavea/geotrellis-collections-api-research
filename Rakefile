@@ -22,6 +22,7 @@ end
 
 desc "Run servers"
 task :server do
+    trap('SIGINT') { sh "docker-compose down"; exit }
     puts "Starting app server on port 9555 and API server on port 7000 ->"
     sh "docker-compose up"
 end

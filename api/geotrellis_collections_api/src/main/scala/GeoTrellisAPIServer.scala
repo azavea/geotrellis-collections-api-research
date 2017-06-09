@@ -46,26 +46,6 @@ object GeoTrellisAPIServer {
     implicit val materializer = ActorMaterializer()
 
     val route = cors() {
-      get {
-        pathSingleSlash {
-          complete(HttpEntity(ContentTypes.`text/html(UTF-8)`,"<html><body>Hello world!</body></html>"))
-        } ~
-        path("localvariety") {
-          complete("/localvariety")
-        } ~
-        path("focalstandarddeviation") {
-          complete("/focalstandarddeviation")
-        } ~
-        path("zonalhistogram") {
-          complete("/zonalhistogram")
-        } ~
-        path("pngtile") {
-          complete("/pngtile")
-        } ~
-        path("geotiff") {
-          complete("/geotiff")
-        }
-      } ~
       post {
         pathSingleSlash {
           complete("""
@@ -77,7 +57,19 @@ object GeoTrellisAPIServer {
             /geotiff
             """.stripMargin)
         } ~
-        path("geojson") {
+        path("localvariety") {
+          entity(as[String]) { str =>
+            val polygon = str.stripMargin.parseGeoJson[Polygon]
+            complete(polygon.centroid.toString)
+          }
+        } ~
+        path("focalstandarddeviation") {
+          entity(as[String]) { str =>
+            val polygon = str.stripMargin.parseGeoJson[Polygon]
+            complete(polygon.centroid.toString)
+          }
+        } ~
+        path("zonalhistogram") {
           entity(as[String]) { str =>
             val polygon = str.stripMargin.parseGeoJson[Polygon]
             complete(polygon.centroid.toString)
@@ -87,6 +79,12 @@ object GeoTrellisAPIServer {
           entity(as[String]) { str =>
             val polygon = str.stripMargin.parseGeoJson[Polygon]
             createTile(polygon.envelope).write(System.currentTimeMillis.toString + ".png")
+            complete(polygon.centroid.toString)
+          }
+        } ~
+        path("geotiff") {
+          entity(as[String]) { str =>
+            val polygon = str.stripMargin.parseGeoJson[Polygon]
             complete(polygon.centroid.toString)
           }
         }
