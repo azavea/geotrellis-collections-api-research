@@ -1,20 +1,52 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import Map from './Map.jsx';
+import Map from './Map';
+import Header from './Header';
+import Panel from './Panel';
 
 class App extends Component {
-    componentWillReceiveProps({ data }) {
-        window.console.log(data);
+    constructor(props) {
+        super(props);
+        this.state = { panelVisible: false };
+        this.togglePanel = this.togglePanel.bind(this);
+    }
+
+    togglePanel() {
+        this.setState({
+            panelVisible: !this.state.panelVisible,
+        });
     }
 
     render() {
+        const {
+            togglePanel,
+            props: {
+                data,
+                dispatch,
+            },
+            state: {
+                panelVisible,
+            },
+        } = this;
+
+        const panel = panelVisible ? <Panel /> : null;
+
+        const mapViewCSS = panelVisible ? 'map-with-panel' : 'full-screen-map';
+
         return (
             <div>
-                <Map
-                    data={this.props.data}
-                    dispatch={this.props.dispatch}
+                <Header
+                    togglePanel={togglePanel}
+                    panelVisible={panelVisible}
                 />
+                <div id={mapViewCSS}>
+                    <Map
+                        data={data}
+                        dispatch={dispatch}
+                    />
+                </div>
+                {panel}
             </div>
         );
     }

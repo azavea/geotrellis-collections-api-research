@@ -102,4 +102,7 @@ module.exports = {
             index: '/',
         },
     },
+    resolve: {
+        extensions: ['.js', '.jsx'],
+    },
 };
