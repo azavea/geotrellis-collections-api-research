@@ -33,6 +33,7 @@ export default function appPage(state = initAppPageState, { type, payload }) {
         case CLEAR_AOI:
             return Object.assign({}, state, {
                 aoi: null,
+                data: null,
             });
         case CHANGE_API_ENDPOINT:
             return Object.assign({}, state, {
