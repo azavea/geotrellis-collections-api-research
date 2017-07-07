@@ -4,6 +4,9 @@ import {
     FAIL_SUBMIT_AOI,
     CLEAR_AOI,
     CHANGE_API_ENDPOINT,
+    START_PING_API,
+    COMPLETE_PING_API,
+    FAIL_PING_API,
 } from './actions';
 
 const initAppPageState = {
@@ -11,6 +14,8 @@ const initAppPageState = {
     fetching: false,
     data: null,
     selectedApiEndpoint: '/pngtile',
+    pong: true,
+    sendingPing: false,
 };
 
 export default function appPage(state = initAppPageState, { type, payload }) {
@@ -38,6 +43,20 @@ export default function appPage(state = initAppPageState, { type, payload }) {
         case CHANGE_API_ENDPOINT:
             return Object.assign({}, state, {
                 selectedApiEndpoint: payload,
+            });
+        case START_PING_API:
+            return Object.assign({}, state, {
+                sendingPing: true,
+            });
+        case COMPLETE_PING_API:
+            return Object.assign({}, state, {
+                pong: true,
+                sendingPing: false,
+            });
+        case FAIL_PING_API:
+            return Object.assign({}, state, {
+                pong: false,
+                sendingPing: false,
             });
         default:
             return state;

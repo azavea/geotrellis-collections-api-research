@@ -1,6 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
+import {
+    pingApiEndpoint,
+} from './actions';
+
 import Map from './Map';
 import Header from './Header';
 import Panel from './Panel';
@@ -10,6 +14,10 @@ class App extends Component {
         super(props);
         this.state = { panelVisible: false };
         this.togglePanel = this.togglePanel.bind(this);
+    }
+
+    componentDidMount() {
+        this.props.dispatch(pingApiEndpoint());
     }
 
     togglePanel() {
@@ -25,6 +33,7 @@ class App extends Component {
                 data,
                 dispatch,
                 selectedApiEndpoint,
+                pong,
             },
             state: {
                 panelVisible,
@@ -44,6 +53,8 @@ class App extends Component {
                 <Header
                     togglePanel={togglePanel}
                     panelVisible={panelVisible}
+                    pingSuccessful={pong}
+                    pingApi={() => dispatch(pingApiEndpoint())}
                 />
                 <div id={mapViewCSS}>
                     <Map
@@ -63,17 +74,24 @@ App.propTypes = {
     data: PropTypes.string,
     fetching: PropTypes.bool,
     selectedApiEndpoint: PropTypes.string.isRequired,
+    pong: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps({
     appPage: {
-        aoi, data, fetching, selectedApiEndpoint,
-} }) {
+        aoi,
+        data,
+        fetching,
+        selectedApiEndpoint,
+        pong,
+    },
+}) {
     return {
         aoi,
         data,
         fetching,
         selectedApiEndpoint,
+        pong,
     };
 }
 

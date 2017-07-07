@@ -9,6 +9,9 @@ export const COMPLETE_SUBMIT_AOI = 'COMPLETE_SUBMIT_AOI';
 export const FAIL_SUBMIT_AOI = 'FAIL_SUBMIT_AOI';
 export const CLEAR_AOI = 'CLEAR_AOI';
 export const CHANGE_API_ENDPOINT = 'CHANGE_API_ENDPOINT';
+export const START_PING_API = 'START_PING_API';
+export const COMPLETE_PING_API = 'COMPLETE_PING_API';
+export const FAIL_PING_API = 'FAIL_PING_API';
 
 let cancelAxiosRequest = null;
 
@@ -65,5 +68,32 @@ export function changeApiEndpoint(payload) {
     return {
         type: CHANGE_API_ENDPOINT,
         payload,
+    };
+}
+
+function startPingApi() {
+    return {
+        type: START_PING_API,
+    };
+}
+
+function completePingApi() {
+    return {
+        type: COMPLETE_PING_API,
+    };
+}
+
+function failPingApi() {
+    return {
+        type: FAIL_PING_API,
+    };
+}
+
+export function pingApiEndpoint() {
+    return (dispatch) => {
+        dispatch(startPingApi());
+        axios.get(`${apiServerURL}/ping`)
+            .then(() => dispatch(completePingApi()))
+            .catch(() => dispatch(failPingApi()));
     };
 }
