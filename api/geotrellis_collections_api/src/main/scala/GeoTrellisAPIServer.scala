@@ -14,7 +14,10 @@ import geotrellis.raster.mapalgebra.focal.Kernel
 import geotrellis.vector._
 import geotrellis.vector.io._
 import geotrellis.spark._
-import org.apache.spark.rdd.RDD
+import geotrellis.spark._
+import geotrellis.spark.io._
+import geotrellis.spark.io.s3._
+import org.apache.spark._
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
 
 object GeoTrellisAPIServer {
@@ -41,11 +44,33 @@ object GeoTrellisAPIServer {
     kde.renderPng(colorMap)
   }
 
+  def catalog(sc: SparkContext): S3LayerReader =
+    catalog("datahub-catalogs-us-east-1", "catalog")(sc)
+
+  def catalog(bucket: String, rootPath: String)(implicit sc: SparkContext): S3LayerReader = {
+    val attributeStore = new S3AttributeStore(bucket, rootPath)
+    val catalog = new S3LayerReader(attributeStore)
+    catalog
+  }
+
   def main(args: Array[String]) {
-    implicit val system = ActorSystem("my-system")
+    implicit val system = ActorSystem("geotrellis-research-api-server")
     implicit val materializer = ActorMaterializer()
 
+    val conf = new SparkConf()
+        .setAppName("GeoTrellis Collections API Research Server")
+        .setMaster("local[2]")
+        .set("spark.executor.memory", "1g")
+    val sc = new SparkContext(conf)
+
     val route = cors() {
+      get {
+        path("ping") {
+          entity(as[String]) { _ =>
+            complete(catalog(sc).toString)
+          }
+        }
+      } ~
       post {
         pathSingleSlash {
           complete("""
