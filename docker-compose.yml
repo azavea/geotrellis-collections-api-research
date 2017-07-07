@@ -14,9 +14,11 @@ services:
         build:
             context: ./api
             dockerfile: Dockerfile
+        environment:
+            AWS_PROFILE: ${RESEARCH_PROJECT_DATA}
         volumes:
             - ./api/geotrellis_collections_api:/usr/src
-            - ./data:/usr/data
+            - ~/.aws:/root/.aws
         ports:
             - "7000:7000"
         command:

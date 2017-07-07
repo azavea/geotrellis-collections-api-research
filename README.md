@@ -21,6 +21,12 @@ rake
 
 This will build Docker containers for the app and API.
 
+#### Data
+
+To run the API you'll need credentials for accessing Azavea's raster data sets.
+Set them by configuring your `~/.aws` dir on host and then adjusting the
+`AWS_PROFILE` environment variable in `docker-compose.yml` to match.
+
 #### Server
 
 To start the app and API servers, run:
