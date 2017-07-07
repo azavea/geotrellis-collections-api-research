@@ -57,6 +57,7 @@ module.exports = {
             filename: 'index.html',
             template: 'template.html'
         }),
+        new webpack.HotModuleReplacementPlugin()
     ],
     module: {
         rules: [{
@@ -93,15 +94,18 @@ module.exports = {
             loader: 'eslint-loader',
         }]
     },
-    watchOptions: {
-        poll: 1000,
-    },
     devServer: {
         historyApiFallback: {
             index: '/',
+            disableHostCheck: true,
+            host: '0.0.0.0',
         },
-        disableHostCheck: true,
-        host: '0.0.0.0',
+        hot: true,
+        overlay: true,
+        stats: 'minimal',
+        watchOptions: {
+            poll: true,
+        },
     },
     resolve: {
         extensions: ['.js', '.jsx'],
