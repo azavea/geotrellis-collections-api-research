@@ -21,5 +21,6 @@ services:
             - ~/.aws:/root/.aws
         ports:
             - "7000:7000"
+            - "4040:4040"
         command:
             ./sbt ~reStart
