@@ -6,7 +6,6 @@ import akka.stream.ActorMaterializer
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import spray.json._
 import spray.json.DefaultJsonProtocol._
-import org.apache.spark._
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
 
 object GeoTrellisAPIServer extends GeoTrellisUtils {
@@ -14,17 +13,11 @@ object GeoTrellisAPIServer extends GeoTrellisUtils {
     implicit val system = ActorSystem("geotrellis-research-api-server")
     implicit val materializer = ActorMaterializer()
 
-    val conf = new SparkConf()
-        .setAppName("GeoTrellis Collections API Research Server")
-        .setMaster("local[2]")
-        .set("spark.executor.memory", "1g")
-    val sc = new SparkContext(conf)
-
     val route = cors() {
       get {
         path("ping") {
           entity(as[String]) { _ =>
-            complete(catalog(sc).toString)
+            complete("hello")
           }
         }
       } ~
@@ -41,8 +34,7 @@ object GeoTrellisAPIServer extends GeoTrellisUtils {
         } ~
         path("localvariety") {
           entity(as[String]) { shape =>
-            val nlcdCount = getNLCDRDDForShape(shape, sc).toString
-            complete(nlcdCount)
+            complete("hello")
           }
         } ~
         path("focalstandarddeviation") {
@@ -53,21 +45,18 @@ object GeoTrellisAPIServer extends GeoTrellisUtils {
         } ~
         path("zonalhistogram") {
           entity(as[String]) { shape =>
-            val polygon = parseShape(shape)
-            complete(polygon.centroid.toString)
+            complete(nlcdSlopeCount(shape))
           }
         } ~
         path("pngtile") {
           entity(as[String]) { shape =>
             val polygon = parseShape(shape)
-            createTile(polygon.envelope).write(System.currentTimeMillis.toString + ".png")
             complete(polygon.centroid.toString)
           }
         } ~
         path("geotiff") {
           entity(as[String]) { shape =>
-            val slopeCount = getSlopeRDDForShape(shape, sc).toString
-            complete(slopeCount)
+            complete("hello")
           }
         }
       }

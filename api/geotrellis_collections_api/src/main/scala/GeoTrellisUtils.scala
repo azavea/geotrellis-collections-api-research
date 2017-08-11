@@ -1,7 +1,11 @@
 import scala.io.StdIn
 import scala.util._
+import scala.collection.mutable
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 import geotrellis.raster._
 import geotrellis.raster.render._
+import geotrellis.raster.rasterize.Rasterizer.Options
 import geotrellis.raster.mapalgebra.focal.Kernel
 import geotrellis.vector._
 import geotrellis.vector.io._
@@ -10,56 +14,97 @@ import geotrellis.spark.io._
 import geotrellis.spark.io.s3._
 import org.apache.spark._
 import spray.json._
+import spire.syntax.cfor._
 
 trait GeoTrellisUtils {
   def parseShape(geoJson: String): Polygon =
       geoJson.parseJson.convertTo[Polygon]
 
-  // Adapted from http://geotrellis.readthedocs.io/en/latest/tutorials/kernel-density.html
-  def randomPointFeature(extent: Extent): PointFeature[Double] = {
-    def randInRange (low: Double, high: Double): Double = {
-      val x = Random.nextDouble
-      low * (1-x) + high * x
+  def slopeLayer = LayerId("us-percent-slope-30m-epsg5070", 0)
+  def nlcdLayer = LayerId("nlcd-2011-30m-epsg5070-0.10.0", 0)
+  def baseLayerReader = {
+    val attributeStore = new S3AttributeStore("datahub-catalogs-us-east-1", "")
+    new S3CollectionLayerReader(attributeStore)
+  }
+
+  def layerFetch(layer: LayerId, shape: Polygon) =
+    Future {
+      baseLayerReader
+        .query[SpatialKey, Tile, TileLayerMetadata[SpatialKey]](layer)
+        .where(Intersects(shape))
+        .result
     }
-    Feature(Point(randInRange(extent.xmin, extent.xmax),
-                  randInRange(extent.ymin, extent.ymax)),
-            Random.nextInt % 16 + 16)
+
+  def nlcdFetch(shape: Polygon) = layerFetch(nlcdLayer, shape)
+  def slopeFetch(shape: Polygon) = layerFetch(slopeLayer, shape)
+
+  def nlcdSlopeCount(shape: String): Future[Map[(Int, Int), Long]] = {
+    val polygon = parseShape(shape)
+    for (
+      nlcdLayer <- nlcdFetch(polygon);
+      slopeLayer <- slopeFetch(polygon)
+    ) yield {
+      histograms(
+        nlcdLayer,
+        slopeLayer,
+        polygon
+      )
+    }
   }
 
-  def createTile(extent: Extent): Png = {
-    val pts = (for (i <- 1 to 1000) yield randomPointFeature(extent)).toList
-    val kernelWidth: Int = 9
-    val kern: Kernel = Kernel.gaussian(kernelWidth, 1.5, 25)
-    val kde: Tile = pts.kernelDensity(kern, RasterExtent(extent, 700, 400))
-    val colorMap = ColorMap(
-      (0 to kde.findMinMax._2 by 4).toArray,
-      ColorRamps.HeatmapBlueToYellowToRedSpectrum)
+  // from https://github.com/WikiWatershed/mmw-geoprocessing/issues/47
+  def histograms(
+    layer1: TileLayerCollection[SpatialKey],
+    layer2: TileLayerCollection[SpatialKey],
+    polygon: Polygon
+  ): Map[(Int, Int), Long] = {
+    val mapTransform = layer1.metadata.layout.mapTransform
 
-    kde.renderPng(colorMap)
-  }
+    val layer1Map = layer1.toMap
+    val layer2Map = layer2.toMap
 
-  def catalog(sc: SparkContext): S3LayerReader =
-    catalog("datahub-catalogs-us-east-1", "")(sc)
+    val result =
+      layer1Map.keys.toSet
+        .intersect(layer2Map.keys.toSet)
+        .par
+        .map { k =>
+          val tileResult = mutable.Map[(Int, Int), Long]()
+          val (tile1, tile2) = (layer1Map(k), layer2Map(k))
+          // Assumes tile1.dimensions == tile2.dimensions
+          val re = RasterExtent(mapTransform(k), tile1.cols, tile1.rows)
 
-  def catalog(bucket: String, rootPath: String)(implicit sc: SparkContext): S3LayerReader = {
-    val attributeStore = new S3AttributeStore(bucket, rootPath)
-    val catalog = new S3LayerReader(attributeStore)
-    catalog
-  }
+          if (polygon.contains(re.extent)) {
+            cfor(0)(_ < re.cols, _ + 1) { col =>
+              cfor(0)(_ < re.rows, _ + 1) { row =>
+                val v1 = tile1.get(col, row)
+                val v2 = tile2.get(col, row)
+                val k = (v1, v2)
+                if (!tileResult.contains(k)) {
+                  tileResult(k) = 0
+                }
+                tileResult(k) += 1
+              }
+            }
+          } else {
+            polygon.foreach(re, Options(includePartial=true, sampleType=PixelIsArea)) { (col, row) =>
+              val v1 = tile1.get(col, row)
+              val v2 = tile2.get(col, row)
+              val k = (v1, v2)
+              if(!tileResult.contains(k)) {
+                tileResult(k) = 0
+              }
+              tileResult(k) += 1
+            }
+          }
 
-  def getSlopeRDDForShape(geoJson: String, sc: SparkContext): TileLayerRDD[SpatialKey] = {
-    getRDDForShape(geoJson, "us-percent-slope-30m-epsg5070", sc)
-  }
+          tileResult.toMap
+        }
+        .reduce { (m1, m2) =>
+          (m1.toSeq ++ m2.toSeq)
+            .groupBy(_._1)
+            .map { case(k, values) => k -> values.map(_._2).sum }
+        }
 
-  def getNLCDRDDForShape(geoJson: String, sc: SparkContext): TileLayerRDD[SpatialKey] = {
-    getRDDForShape(geoJson, "nlcd-2011-30m-epsg5070-0.10.0", sc)
-  }
-
-  def getRDDForShape(geoJson: String, layerName: String, sc: SparkContext): TileLayerRDD[SpatialKey] = {
-    val shapeExtent = parseShape(geoJson).envelope
-    catalog(sc)
-      .query[SpatialKey, Tile, TileLayerMetadata[SpatialKey]](LayerId(layerName, 0))
-      .where(Intersects(shapeExtent))
-      .result
+    result
   }
 }

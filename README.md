@@ -43,7 +43,6 @@ This will start servers to run the app on port `9555` and the API on port `7000`
 | --- | --- |
 | [9555](http://localhost:9555) | Webpack dev server |
 | [7000](http://localhost:7000) | GeoTrellis API |
-| [4040](http://localhost:4040) | Spark web interface |
 
 ### API Endpoints
 

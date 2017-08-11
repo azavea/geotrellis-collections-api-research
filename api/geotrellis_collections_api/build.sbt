@@ -25,7 +25,8 @@ libraryDependencies ++= {
     "org.locationtech.geotrellis" %% "geotrellis-spark" % "1.1.1",
     "org.locationtech.geotrellis" %% "geotrellis-s3" % "1.1.1",
     "org.apache.spark" %% "spark-core" % "2.1.1",
-    "ch.megard" %% "akka-http-cors" % "0.2.1"
+    "ch.megard" %% "akka-http-cors" % "0.2.1",
+    "org.typelevel" %% "spire" % "0.14.1"
   )
 }
 
