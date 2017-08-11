@@ -64,5 +64,8 @@ Each of these API endpoints accepts a GeoJSON Feature posted from the client:
 | `rake build` | Build project containers |
 | `rake console app` | Log into app container shell |
 | `rake console api` | Log into API container shell |
-| `rake server` | Start servers |
+| `rake sbt` | Start API with `./sbt ~reStart` |
+| `rake server` | Start containers |
+| `rake server app` | Start webpack-dev-server container |
+| `rake server api` | Start API container |
 | `rake tmux` | Setup project Tmuxinator configuration |

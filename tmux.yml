@@ -2,7 +2,8 @@ name: geotrellis-research
 root: ~/dvlp/geotrellis-collections-api-research
 
 windows:
-  - geotrellis-research:
-  - servers: rake build && rake server
-  - consoles:
+  - geotrellis-research: code .
+  - webpack-dev-server: rake build && rake server api
+  - sbt: rake sbt
+  - console:
   - vim: vim .
