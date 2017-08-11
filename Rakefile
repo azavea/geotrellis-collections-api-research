@@ -20,6 +20,14 @@ task :console do
     end
 end
 
+desc "./sbt ~reStart"
+task :sbt do
+    puts "Starting api service ->"
+    Dir.chdir('./api/geotrellis_collections_api') do
+        sh "./sbt ~reStart"
+    end
+end
+
 desc "Run servers"
 task :server do
     trap('SIGINT') { sh "docker-compose down"; exit }
