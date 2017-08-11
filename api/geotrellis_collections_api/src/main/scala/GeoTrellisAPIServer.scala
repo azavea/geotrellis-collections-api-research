@@ -7,17 +7,22 @@ import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import spray.json._
 import spray.json.DefaultJsonProtocol._
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
+import org.apache.log4j.Logger
 
 object GeoTrellisAPIServer extends GeoTrellisUtils {
+  val logger = Logger.getLogger(this.getClass.getName)
+
   def main(args: Array[String]) {
     implicit val system = ActorSystem("geotrellis-research-api-server")
     implicit val materializer = ActorMaterializer()
+
+    logger.info("Logger: Welcome to log4j")
 
     val route = cors() {
       get {
         path("ping") {
           entity(as[String]) { _ =>
-            complete("hello")
+            complete("pong")
           }
         }
       } ~
