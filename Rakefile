@@ -23,8 +23,14 @@ end
 desc "Run servers"
 task :server do
     trap('SIGINT') { sh "docker-compose down"; exit }
-    puts "Starting app server on port 9555 and API server on port 7000 ->"
-    sh "docker-compose up"
+    if ARGV.count == 2 && ['app', 'api'].include?(ARGV[1])
+        service = ARGV[1]
+        puts "Starting #{service} server ->"
+        sh "docker-compose up #{service}"
+    else
+        puts "Starting app server on port 9555 and API server on port 7000 ->"
+        sh "docker-compose up"
+    end
 end
 
 desc "Configure Tmuxinator"
