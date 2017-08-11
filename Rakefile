@@ -1,11 +1,9 @@
 task default: %[build]
 
-desc "Build project"
+desc "Build app container"
 task :build do
     puts "Building app container ->"
     sh "docker-compose -f docker-compose.yml run --rm --no-deps app yarn"
-    puts "Building API container ->"
-    sh "docker-compose build api"
 end
 
 desc "Log in to container shell"

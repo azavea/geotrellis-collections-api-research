@@ -61,7 +61,7 @@ Each of these API endpoints accepts a GeoJSON Feature posted from the client:
 
 | Command | Description |
 | --- | --- |
-| `rake build` | Build project containers |
+| `rake build` | Build app container |
 | `rake console app` | Log into app container shell |
 | `rake console api` | Log into API container shell |
 | `rake sbt` | Start API with `./sbt ~reStart` |
