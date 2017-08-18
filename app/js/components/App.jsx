@@ -70,7 +70,7 @@ class App extends Component {
 
 App.propTypes = {
     dispatch: PropTypes.func.isRequired,
-    aoi: PropTypes.object,
+    aoi: PropTypes.array,
     data: PropTypes.string,
     fetching: PropTypes.bool,
     selectedApiEndpoint: PropTypes.string.isRequired,

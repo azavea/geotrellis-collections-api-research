@@ -48,17 +48,18 @@ function failSubmitAreaOfInterest() {
     };
 }
 
-export function submitAreaOfInterest(aoi) {
+export function submitAreaOfInterest({ geometry: { coordinates: aoi } }) {
     cancelPriorRequest();
     return (dispatch, getState) => {
         dispatch(startSubmitAreaOfInterest(aoi));
         const { appPage: { selectedApiEndpoint } } = getState();
-        axios.post(`${apiServerURL}${selectedApiEndpoint}`, JSON.stringify(aoi), {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            cancelToken: new CancelToken((c) => { cancelAxiosRequest = c; }),
-        })
+        axios.post(`${apiServerURL}${selectedApiEndpoint}`, { geometry: JSON.stringify(aoi) },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                cancelToken: new CancelToken((c) => { cancelAxiosRequest = c; }),
+            })
              .then(({ data }) => dispatch(completeSubmitAreaOfInterest(data)))
              .catch(() => dispatch(failSubmitAreaOfInterest()));
     };
