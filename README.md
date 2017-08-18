@@ -8,6 +8,7 @@ A research project to set up and use GeoTrellis as a REST service.
 
 * Docker
 * Rake
+* sbt
 
 ### Getting started
 
@@ -19,17 +20,17 @@ Clone the project, ensure Docker's running, then run:
 rake
 ```
 
-This will build Docker containers for the app and API.
+This will build the app client & compile the API service.
 
 #### Data
 
 To run the API you'll need credentials for accessing Azavea's raster data sets.
-Set them by configuring your `~/.aws` dir on host and then adjusting the
-`AWS_PROFILE` environment variable in `docker-compose.yml` to match.
+Set them by running `aws configure --profile <PROFILE>` where `<PROFILE>`
+represents your credentials.
 
 #### Server
 
-To start the app and API servers, run:
+To start the app & api servers, run:
 
 ```
 rake server
@@ -64,7 +65,5 @@ Each of these API endpoints accepts a GeoJSON Feature posted from the client:
 | `rake console app` | Log into app container shell |
 | `rake console api` | Log into API container shell |
 | `rake sbt` | Start API with `./sbt ~reStart` |
-| `rake server` | Start containers |
-| `rake server app` | Start webpack-dev-server container |
-| `rake server api` | Start API container |
+| `rake server` | Start app container & API service |
 | `rake tmux` | Setup project Tmuxinator configuration |
