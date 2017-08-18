@@ -38,16 +38,16 @@ object Server extends Geoprocessing {
         pathSingleSlash {
           complete("""
             POST GeoJSON shapes to:
-            /localvariety
+            /nlcdcount
             /focalstandarddeviation
             /zonalhistogram
             /pngtile
             /geotiff
             """.stripMargin)
         } ~
-        path("localvariety") {
+        path("nlcdcount") {
           entity(as[GeoJsonData]) { shape =>
-            complete(getLocalVariety(shape).toJson)
+            complete(getNLCDCount(shape))
           }
         } ~
         path("focalstandarddeviation") {
@@ -60,12 +60,12 @@ object Server extends Geoprocessing {
             complete(getZonalHistogram(shape).toJson)
           }
         } ~
-        path("pngtile") {
+        path("nlcdpngtile") {
           entity(as[GeoJsonData]) { shape =>
             complete(getPngTile(shape).toJson)
           }
         } ~
-        path("geotiff") {
+        path("soilgeotiff") {
           entity(as[GeoJsonData]) { shape =>
             complete(getGeoTiff(shape).toJson)
           }

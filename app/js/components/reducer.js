@@ -12,7 +12,7 @@ import {
 const initAppPageState = {
     fetching: false,
     data: null,
-    selectedApiEndpoint: '/localvariety',
+    selectedApiEndpoint: '/nlcdcount',
     pong: true,
     sendingPing: false,
 };

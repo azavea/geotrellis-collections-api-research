@@ -11,7 +11,7 @@ import geotrellis.vector.io._
 import geotrellis.spark._
 
 trait Geoprocessing extends Utils {
-  def getLocalVariety(aoi: GeoJsonData): ResponseData = {
+  def getNLCDCount(aoi: GeoJsonData): ResponseData = {
     val areaOfInterest = createAOIFromInput(aoi.geometry)
     val rasterLayer = cropSingleRasterToAOI("nlcd-2011-30m-epsg5070-0.10.0", areaOfInterest)
     ResponseData(localNLCDVariety(rasterLayer, areaOfInterest))

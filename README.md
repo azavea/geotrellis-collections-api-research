@@ -51,11 +51,11 @@ Each of these API endpoints accepts a polygon geometry object posted from the cl
 
 | Path | Service |
 | --- | --- |
-| [/localvariety](http://localhost:7000/localvariety) | Returns local variety results |
+| [/nlcdcount](http://localhost:7000/nlcdcount) | Returns a NLCD cell counts arranged by type for AOI |
 | [/focalstandarddeviation](http://localhost:7000/focalstandarddeviation) | Returns focal standard deviation results |
 | [/zonalhistogram](http://localhost:7000/zonalhistogram) | Returns zonal histogram results |
-| [/pngtile](http://localhost:7000/pngtile) | Returns a PNG tile fit to the shape |
-| [/geotiff](http://localhost:7000/geotiff) | Returns a GeoTIFF for the drawn shape along with Raster data
+| [/nlcdpngtile](http://localhost:7000/nlcdpngtile) | Returns an AOI-shaped PNG tile representing NLCD cell counts |
+| [/soilgeotiff](http://localhost:7000/soilgeotiff) | Returns an AOI-shaped GeoTiff representing soil count values |
 
 ### Rake commands
 
