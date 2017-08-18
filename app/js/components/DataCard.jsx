@@ -11,7 +11,7 @@ export default function DataCard({
                 className="pt-card pt-dark pt-elevation-2 pt-interactive"
             >
                 <h5>
-                    The centroid of your shape is
+                    NLCD cell count for your area of interest is:
                 </h5>
                 <span>
                     {data}

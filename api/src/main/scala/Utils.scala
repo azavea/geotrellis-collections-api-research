@@ -16,26 +16,24 @@ import geotrellis.spark.io.s3._
 trait Utils {
   val baseLayerReader = S3CollectionLayerReader("datahub-catalogs-us-east-1", "")
 
+  def cropSingleRasterToAOI(
+    rasterId: String,
+    aoi: MultiPolygon
+  ): TileLayerCollection[SpatialKey] =
+    fetchCroppedLayer(LayerId(rasterId, 0), aoi)
+
   def cropRastersToAOI(
     rasterIds: List[String],
-    zoom: Int,
     aoi: MultiPolygon
   ): Seq[TileLayerCollection[SpatialKey]] =
-    rasterIds
-      .map { str => LayerId(str, zoom) }
-      .map { layer => fetchCroppedLayer(layer, aoi)}
+    rasterIds.map { rasterId => cropSingleRasterToAOI(rasterId, aoi)}
 
-  def createAOIFromInput(polygon: String): MultiPolygon =
-    parseGeometry(polygon, WebMercator, ConusAlbers)
-      .buffer(0)
-      .asMultiPolygon
-      .get
+  def createAOIFromInput(polygon: String): MultiPolygon = parseGeometry(polygon)
 
-  def parseGeometry(geoJson: String, srcCRS: CRS, destCRS: CRS): MultiPolygon = {
+  def parseGeometry(geoJson: String): MultiPolygon = {
     geoJson.parseJson.convertTo[Geometry] match {
-      case p: Polygon => MultiPolygon(p.reproject(srcCRS, destCRS))
-      case mp: MultiPolygon => mp.reproject(srcCRS, destCRS)
-      case _ => MultiPolygon()
+      case p: Polygon => MultiPolygon(p.reproject(LatLng, ConusAlbers))
+      case _ => throw new Exception("Invalid shape")
     }
   }
 
@@ -45,7 +43,7 @@ trait Utils {
     val maps: Seq[Map[SpatialKey, Tile]] = layers.map((_: Seq[(SpatialKey, Tile)]).toMap)
     val keySet: Array[SpatialKey] = maps.map(_.keySet).reduce(_ union _).toArray
     for (
-        key: SpatialKey <- keySet
+      key: SpatialKey <- keySet
     ) yield {
       val tiles: Seq[Tile] = maps.map(_.apply(key))
       key -> tiles

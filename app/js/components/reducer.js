@@ -10,10 +10,9 @@ import {
 } from './actions';
 
 const initAppPageState = {
-    aoi: null,
     fetching: false,
     data: null,
-    selectedApiEndpoint: '/pngtile',
+    selectedApiEndpoint: '/localvariety',
     pong: true,
     sendingPing: false,
 };
@@ -22,7 +21,6 @@ export default function appPage(state = initAppPageState, { type, payload }) {
     switch (type) {
         case START_SUBMIT_AOI:
             return Object.assign({}, state, {
-                aoi: payload,
                 data: null,
                 fetching: true,
             });
@@ -37,7 +35,6 @@ export default function appPage(state = initAppPageState, { type, payload }) {
             });
         case CLEAR_AOI:
             return Object.assign({}, state, {
-                aoi: null,
                 data: null,
             });
         case CHANGE_API_ENDPOINT:

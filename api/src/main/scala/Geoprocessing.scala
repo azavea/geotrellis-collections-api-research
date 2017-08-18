@@ -12,7 +12,9 @@ import geotrellis.spark._
 
 trait Geoprocessing extends Utils {
   def getLocalVariety(aoi: GeoJsonData): ResponseData = {
-    ResponseData(Map("hello" -> 1))
+    val areaOfInterest = createAOIFromInput(aoi.geometry)
+    val rasterLayer = cropSingleRasterToAOI("nlcd-2011-30m-epsg5070-0.10.0", areaOfInterest)
+    ResponseData(localNLCDVariety(rasterLayer, areaOfInterest))
   }
 
   def getFocalStandardDeviation(aoi: GeoJsonData): ResponseData = {
@@ -31,33 +33,30 @@ trait Geoprocessing extends Utils {
     ResponseData(Map("hello" -> 1))
   }
 
-  private def rasterGroupedCount(
-    rasterLayers: Seq[TileLayerCollection[SpatialKey]],
-    multiPolygon: MultiPolygon
+  private def localNLCDVariety(
+    rasterLayer: TileLayerCollection[SpatialKey],
+    areaOfInterest: MultiPolygon
   ): Map[String, Int] = {
     val init = () => new LongAdder
     val update = (_: LongAdder).increment()
-    // assume all the layouts are the same
-    val metadata = rasterLayers.head.metadata
+    val metadata = rasterLayer.metadata
 
-    var pixelGroups: TrieMap[List[Int], LongAdder] = TrieMap.empty
+    val pixelGroups: TrieMap[List[Int], LongAdder] = TrieMap.empty
 
-    joinCollectionLayers(rasterLayers).par
+    joinCollectionLayers(Seq(rasterLayer)).par
       .foreach({ case (key, tiles) =>
-        val extent: Extent = metadata.mapTransform(key)
-        val re: RasterExtent = RasterExtent(extent, metadata.layout.tileCols,
-            metadata.layout.tileRows)
+        val extent = metadata.mapTransform(key)
+        val re = RasterExtent(extent, metadata.layout.tileCols,
+          metadata.layout.tileRows)
 
-        Rasterizer.foreachCellByMultiPolygon(multiPolygon, re) { case (col, row) =>
+        Rasterizer.foreachCellByMultiPolygon(areaOfInterest, re) { case (col, row) =>
           val pixelGroup: List[Int] = tiles.map(_.get(col, row)).toList
-          val acc = pixelGroups.getOrElseUpdate(pixelGroup, init())
-          update(acc)
+          update(pixelGroups.getOrElseUpdate(pixelGroup, init()))
         }
       })
 
     pixelGroups
-      .mapValues(_.sum().toInt)
-      .map { case (k, v) => k.toString -> v}
+      .map { case (k, v) => k.head.toString -> v.sum.toInt }
       .toMap
   }
 }

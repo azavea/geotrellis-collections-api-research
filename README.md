@@ -30,7 +30,7 @@ represents your credentials.
 
 #### Server
 
-To start the app & api servers, run:
+To start the app & API servers, run:
 
 ```
 rake server
@@ -47,7 +47,7 @@ This will start servers to run the app on port `9555` and the API on port `7000`
 
 ### API Endpoints
 
-Each of these API endpoints accepts a GeoJSON Feature posted from the client:
+Each of these API endpoints accepts a polygon geometry object posted from the client:
 
 | Path | Service |
 | --- | --- |
@@ -63,7 +63,7 @@ Each of these API endpoints accepts a GeoJSON Feature posted from the client:
 | --- | --- |
 | `rake build` | Build app container |
 | `rake console app` | Log into app container shell |
-| `rake console api` | Log into API container shell |
+| `rake console api` | Log into API with `./sbt console` |
 | `rake sbt` | Start API with `./sbt ~reStart` |
 | `rake server` | Start app container & API service |
 | `rake tmux` | Setup project Tmuxinator configuration |

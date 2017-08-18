@@ -32,6 +32,8 @@
     left: 2.5rem !important;
     bottom: 2.5rem !important;
     position: fixed !important;
+    max-width: 500px;
+    word-wrap: break-word;
 }
 
 #data-viz-panel {

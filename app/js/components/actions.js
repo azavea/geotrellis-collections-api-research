@@ -28,17 +28,16 @@ export function clearAreaOfInterest() {
     };
 }
 
-function startSubmitAreaOfInterest(aoi) {
+function startSubmitAreaOfInterest() {
     return {
         type: START_SUBMIT_AOI,
-        payload: aoi,
     };
 }
 
-function completeSubmitAreaOfInterest(data) {
+function completeSubmitAreaOfInterest({ response }) {
     return {
         type: COMPLETE_SUBMIT_AOI,
-        payload: data,
+        payload: JSON.stringify(response),
     };
 }
 
@@ -48,12 +47,13 @@ function failSubmitAreaOfInterest() {
     };
 }
 
-export function submitAreaOfInterest({ geometry: { coordinates: aoi } }) {
+export function submitAreaOfInterest({ geometry }) {
     cancelPriorRequest();
     return (dispatch, getState) => {
-        dispatch(startSubmitAreaOfInterest(aoi));
+        dispatch(startSubmitAreaOfInterest());
         const { appPage: { selectedApiEndpoint } } = getState();
-        axios.post(`${apiServerURL}${selectedApiEndpoint}`, { geometry: JSON.stringify(aoi) },
+        axios.post(`${apiServerURL}${selectedApiEndpoint}`,
+            JSON.stringify({ geometry: JSON.stringify(geometry) }),
             {
                 headers: {
                     'Content-Type': 'application/json',

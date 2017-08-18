@@ -70,7 +70,6 @@ class App extends Component {
 
 App.propTypes = {
     dispatch: PropTypes.func.isRequired,
-    aoi: PropTypes.array,
     data: PropTypes.string,
     fetching: PropTypes.bool,
     selectedApiEndpoint: PropTypes.string.isRequired,
@@ -79,7 +78,6 @@ App.propTypes = {
 
 function mapStateToProps({
     appPage: {
-        aoi,
         data,
         fetching,
         selectedApiEndpoint,
@@ -87,7 +85,6 @@ function mapStateToProps({
     },
 }) {
     return {
-        aoi,
         data,
         fetching,
         selectedApiEndpoint,
