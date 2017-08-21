@@ -1,3 +1,7 @@
+import scala.concurrent._
+import scala.concurrent.Future
+import ExecutionContext.Implicits.global
+
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
@@ -26,11 +30,17 @@ object Server extends Geoprocessing {
     implicit val system = ActorSystem("geotrellis-research-api-server")
     implicit val materializer = ActorMaterializer()
 
+    implicit val blockingDispatcher = system.dispatchers.lookup("my-blocking-dispatcher")
+
     val route = cors() {
       get {
         path("ping") {
           entity(as[String]) { _ =>
-            complete("pong")
+            complete {
+              Future {
+                "pong"
+              }
+            }
           }
         }
       } ~
@@ -47,27 +57,47 @@ object Server extends Geoprocessing {
         } ~
         path("nlcdcount") {
           entity(as[GeoJsonData]) { shape =>
-            complete(getNLCDCount(shape))
+            complete {
+              Future {
+                getNLCDCount(shape)
+              }
+            }
           }
         } ~
         path("focalstandarddeviation") {
           entity(as[GeoJsonData]) { shape =>
-            complete(getFocalStandardDeviation(shape).toJson)
+            complete {
+              Future {
+                getFocalStandardDeviation(shape).toJson
+              }
+            }
           }
         } ~
         path("zonalhistogram") {
           entity(as[GeoJsonData]) { shape =>
-            complete(getZonalHistogram(shape).toJson)
+            complete {
+              Future {
+                getZonalHistogram(shape).toJson
+              }
+            }
           }
         } ~
         path("nlcdpngtile") {
           entity(as[GeoJsonData]) { shape =>
-            complete(getPngTile(shape).toJson)
+            complete {
+              Future {
+                getPngTile(shape).toJson
+              }
+            }
           }
         } ~
         path("soilgeotiff") {
           entity(as[GeoJsonData]) { shape =>
-            complete(getGeoTiff(shape).toJson)
+            complete {
+              Future {
+                getGeoTiff(shape).toJson
+              }
+            }
           }
         }
       }
