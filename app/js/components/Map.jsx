@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Map as ReactLeafletMap, TileLayer, FeatureGroup } from 'react-leaflet';
 import { EditControl } from 'react-leaflet-draw';
-import { forEach } from 'lodash';
+import R from 'ramda';
 
 import {
     submitAreaOfInterest,
@@ -30,9 +30,8 @@ export default class Map extends Component {
         leafletMap.on('draw:drawstart', () => {
             if (this.drawnShapes) {
                 this.props.dispatch(clearAreaOfInterest());
-                forEach(this.drawnShapes.leafletElement.getLayers(), l => {
-                    leafletMap.removeLayer(l);
-                });
+                R.forEach(l => { leafletMap.removeLayer(l); },
+                    this.drawnShapes.leafletElement.getLayers());
             }
         });
     }

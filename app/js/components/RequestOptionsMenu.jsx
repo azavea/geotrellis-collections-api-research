@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Radio, RadioGroup } from '@blueprintjs/core';
-import { map } from 'lodash';
+import R from 'ramda';
 
 import {
     changeApiEndpoint,
@@ -14,13 +14,13 @@ export default function RequestOptionsMenu({
     dispatch,
     selectedApiEndpoint,
 }) {
-    const radioButtons = map(apiEndpoints, name => (
+    const radioButtons = R.map(name => (
         <Radio
             className="pt-align-right api-endpoint-list-item"
             label={name}
             value={name}
             key={name}
-        />));
+        />), apiEndpoints);
 
     return (
         <RadioGroup
