@@ -4,7 +4,7 @@ name := "geotrellis_collections_api"
 organization := ""
 version := "1.0"
 scalaVersion := "2.11.11"
-javaOptions += "-Xmx1G"
+javaOptions := Seq("-Xmx3072m", "-Xms2048m")
 
 scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
 
