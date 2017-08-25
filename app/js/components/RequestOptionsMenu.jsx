@@ -16,24 +16,19 @@ export default function RequestOptionsMenu({
 }) {
     const radioButtons = map(apiEndpoints, name => (
         <Radio
-            className="pt-align-right"
+            className="pt-align-right api-endpoint-list-item"
             label={name}
             value={name}
             key={name}
         />));
 
-    const selectEndpoint = v => dispatch(changeApiEndpoint(v));
-
     return (
-        <div className="pt-card">
-            <RadioGroup
-                label="API endpoint"
-                onChange={({ target: { value } }) => selectEndpoint(value)}
-                selectedValue={selectedApiEndpoint}
-            >
-                {radioButtons}
-            </RadioGroup>
-        </div>
+        <RadioGroup
+            onChange={({ target: { value } }) => dispatch(changeApiEndpoint(value))}
+            selectedValue={selectedApiEndpoint}
+        >
+            {radioButtons}
+        </RadioGroup>
     );
 }
 

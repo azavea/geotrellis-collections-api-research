@@ -7,62 +7,33 @@ import {
 
 import Map from './Map';
 import Header from './Header';
-import Panel from './Panel';
 
 class App extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { panelVisible: false };
-        this.togglePanel = this.togglePanel.bind(this);
-    }
-
     componentDidMount() {
         this.props.dispatch(pingApiEndpoint());
     }
 
-    togglePanel() {
-        this.setState({
-            panelVisible: !this.state.panelVisible,
-        });
-    }
-
     render() {
         const {
-            togglePanel,
-            props: {
-                data,
-                dispatch,
-                selectedApiEndpoint,
-                pong,
-            },
-            state: {
-                panelVisible,
-            },
-        } = this;
-
-        const panel = panelVisible ? (
-            <Panel
-                dispatch={dispatch}
-                selectedApiEndpoint={selectedApiEndpoint}
-            />) : null;
-
-        const mapViewCSS = panelVisible ? 'map-with-panel' : 'full-screen-map';
+            data,
+            dispatch,
+            selectedApiEndpoint,
+            pong,
+        } = this.props;
 
         return (
             <div>
                 <Header
-                    togglePanel={togglePanel}
-                    panelVisible={panelVisible}
                     pingSuccessful={pong}
                     pingApi={() => dispatch(pingApiEndpoint())}
                 />
-                <div id={mapViewCSS}>
+                <div id="full-screen-map">
                     <Map
                         data={data}
                         dispatch={dispatch}
+                        selectedApiEndpoint={selectedApiEndpoint}
                     />
                 </div>
-                {panel}
             </div>
         );
     }

@@ -15,14 +15,6 @@
     bottom: 0;
 }
 
-#map-with-panel {
-    height: calc(100vh - 50px);
-    position: fixed;
-    left: 0;
-    right: 40%;
-    bottom: 0;
-}
-
 #header-link {
     color: white;
     text-decoration: none;
@@ -36,10 +28,13 @@
     word-wrap: break-word;
 }
 
-#data-viz-panel {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    width: 40%;
-    height: calc(100vh - 50px);
+.api-endpoint-list-item {
+    padding-right: 30px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-size: 15px;
+}
+
+.api-endpoints-control {
+    padding: 12px;
 }
