@@ -49,7 +49,7 @@ object Server extends Geoprocessing {
           complete("""
             POST GeoJSON shapes to:
             /nlcdcount
-            /focalstandarddeviation
+            /slopepercentagecount
             /zonalhistogram
             /pngtile
             /geotiff
@@ -64,11 +64,11 @@ object Server extends Geoprocessing {
             }
           }
         } ~
-        path("focalstandarddeviation") {
+        path("slopepercentagecount") {
           entity(as[GeoJsonData]) { shape =>
             complete {
               Future {
-                getFocalStandardDeviation(shape).toJson
+                getSlopePercentageCount(shape)
               }
             }
           }

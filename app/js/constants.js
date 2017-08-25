@@ -8,7 +8,7 @@ export const attribution = `Tiles courtesy of <a href="http://openstreetmap.se/"
 export const apiServerURL = 'http://localhost:7000';
 export const apiEndpoints = [
     '/nlcdcount',
-    '/focalstandarddeviation',
+    '/slopepercentagecount',
     '/zonalhistogram',
     '/nlcdpngtile',
     '/soilgeotiff',

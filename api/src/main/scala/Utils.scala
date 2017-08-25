@@ -1,6 +1,6 @@
 // adapted from https://github.com/WikiWatershed/mmw-geoprocessing/blob/develop/api/src/main/scala/Utils.scal
 
-import geotrellis.proj4.{CRS, ConusAlbers, LatLng, WebMercator}
+import geotrellis.proj4.{CRS, ConusAlbers, LatLng}
 
 import spray.json._
 import spray.json.DefaultJsonProtocol._

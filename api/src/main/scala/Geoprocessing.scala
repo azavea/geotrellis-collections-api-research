@@ -11,10 +11,20 @@ import geotrellis.vector.io._
 import geotrellis.spark._
 
 trait Geoprocessing extends Utils {
+  val nlcdRDD = "nlcd-2011-30m-epsg5070-0.10.0"
+  val soilGroupsRDD = "ssurgo-hydro-groups-30m-epsg5070-0.10.0"
+  val slopeRDD = "us-percent-slope-30m-epsg5070"
+
   def getNLCDCount(aoi: GeoJsonData): ResponseData = {
     val areaOfInterest = createAOIFromInput(aoi.geometry)
-    val rasterLayer = cropSingleRasterToAOI("nlcd-2011-30m-epsg5070-0.10.0", areaOfInterest)
-    ResponseData(localNLCDVariety(rasterLayer, areaOfInterest))
+    val rasterLayer = cropSingleRasterToAOI(nlcdRDD, areaOfInterest)
+    ResponseData(cellCount(rasterLayer, areaOfInterest))
+  }
+
+  def getSlopePercentageCount(aoi: GeoJsonData): ResponseData = {
+    val areaOfInterest = createAOIFromInput(aoi.geometry)
+    val rasterLayer = cropSingleRasterToAOI(slopeRDD, areaOfInterest)
+    ResponseData(cellCount(rasterLayer, areaOfInterest))
   }
 
   def getFocalStandardDeviation(aoi: GeoJsonData): ResponseData = {
@@ -33,7 +43,7 @@ trait Geoprocessing extends Utils {
     ResponseData(Map("hello" -> 1))
   }
 
-  private def localNLCDVariety(
+  private def cellCount(
     rasterLayer: TileLayerCollection[SpatialKey],
     areaOfInterest: MultiPolygon
   ): Map[String, Int] = {
