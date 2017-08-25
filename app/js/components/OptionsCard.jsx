@@ -14,7 +14,7 @@ export default function OptionsCard({
                 className="pt-card pt-elevation-0 api-endpoints-control"
             >
                 <h5 style={{ color: '#394b59' }}>
-                    Geoprocessing API
+                    Geoprocessing operation
                 </h5>
                 <RequestOptionsMenu
                     dispatch={dispatch}

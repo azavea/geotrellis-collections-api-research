@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Map as ReactLeafletMap, TileLayer, FeatureGroup } from 'react-leaflet';
+import { Map as ReactLeafletMap, TileLayer, FeatureGroup, ZoomControl } from 'react-leaflet';
 import Control from 'react-leaflet-control';
 import { EditControl } from 'react-leaflet-draw';
 import R from 'ramda';
@@ -76,17 +76,19 @@ export default class Map extends Component {
             <ReactLeafletMap
                 center={defaultMapCenter}
                 zoom={defaultZoomLevel}
+                zoomControl={false}
                 ref={l => { this.map = l; }}
             >
                 <TileLayer
                     attribution={attribution}
                     url={tiles}
                 />
+                <ZoomControl position="topright" />
                 <FeatureGroup
                     ref={f => { this.drawnShapes = f; }}
                 >
                     <EditControl
-                        position="topleft"
+                        position="topright"
                         onCreated={this.onCreate}
                         onDeleted={this.onDelete}
                         draw={{
