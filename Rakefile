@@ -4,10 +4,6 @@ desc "Build app & api"
 task :build do
     puts "Building app container ->"
     sh "docker-compose -f docker-compose.yml run --rm --no-deps app yarn"
-    puts "Building api ->"
-    Dir.chdir('./api') do
-        sh "./sbt compile"
-    end
 end
 
 desc "Log in to container shell"
