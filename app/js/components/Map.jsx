@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Map as ReactLeafletMap, TileLayer, FeatureGroup } from 'react-leaflet';
+import Control from 'react-leaflet-control';
 import { EditControl } from 'react-leaflet-draw';
 import R from 'ramda';
 
@@ -55,7 +56,7 @@ export default class Map extends Component {
             <DataCard
                 data={data}
                 selectedApiEndpoint={selectedApiEndpoint}
-            />) : null;
+            />) : <div />;
 
         const optionsCard = (
             <OptionsCard
@@ -91,7 +92,9 @@ export default class Map extends Component {
                         }}
                     />
                 </FeatureGroup>
-                {dataCard}
+                <Control position="bottomleft">
+                    {dataCard}
+                </Control>
                 {optionsCard}
             </ReactLeafletMap>
         );

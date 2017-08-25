@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
-import Control from 'react-leaflet-control';
 
 import NLCDChart from './NLCDChart';
+import SoilGroupsChart from './SoilGroupsChart';
 
 export default function DataCard({
     data,
@@ -9,30 +9,40 @@ export default function DataCard({
 }) {
     if (selectedApiEndpoint === '/nlcdcount') {
         return (
-            <Control position="bottomleft">
-                <div className="pt-card pt-elevation-0">
-                    <h4>
-                        NLCD cell counts
-                    </h4>
-                    <NLCDChart data={data} />
-                </div>
-            </Control>
+            <div className="pt-card pt-elevation-0 data-card">
+                <h4>
+                    NLCD cell counts
+                </h4>
+                <NLCDChart data={data} />
+            </div>
+        );
+    }
+
+    if (selectedApiEndpoint === '/soilgroupcount') {
+        return (
+            <div className="pt-card pt-elevation-0 data-card">
+                <h4>
+                    Soil groups composition
+                </h4>
+                <SoilGroupsChart data={data} />
+            </div>
         );
     }
 
     return (
-        <Control position="bottomleft">
-            <div className="pt-card pt-elevation-0">
-                <div>
-                    <h5>
-                        Data for your area of interest:
-                    </h5>
-                    <span>
-                        {JSON.stringify(data)}
-                    </span>
-                </div>
+        <div
+            className="pt-card pt-elevation-0 data-card"
+            style={{ maxWidth: '500px', wordBreak: 'break-all' }}
+        >
+            <div>
+                <h5>
+                    Data for your area of interest:
+                </h5>
+                <span>
+                    {JSON.stringify(data)}
+                </span>
             </div>
-        </Control>
+        </div>
     );
 }
 
