@@ -24,17 +24,18 @@ export default class Map extends Component {
         super(props);
         this.onCreate = this.onCreate.bind(this);
         this.onDelete = this.onDelete.bind(this);
+        this.clearShapes = this.clearShapes.bind(this);
     }
 
     componentDidMount() {
         const { leafletElement: leafletMap } = this.map;
-        leafletMap.on('draw:drawstart', () => {
-            if (this.drawnShapes) {
-                this.props.dispatch(clearAreaOfInterest());
-                R.forEach(l => { leafletMap.removeLayer(l); },
-                    this.drawnShapes.leafletElement.getLayers());
-            }
-        });
+        leafletMap.on('draw:drawstart', () => { this.clearShapes(); });
+    }
+
+    componentWillReceiveProps({ selectedApiEndpoint }) {
+        if (selectedApiEndpoint !== this.props.selectedApiEndpoint) {
+            this.clearShapes();
+        }
     }
 
     onCreate({ layer }) {
@@ -43,6 +44,13 @@ export default class Map extends Component {
 
     onDelete() {
         this.props.dispatch(clearAreaOfInterest());
+    }
+
+    clearShapes() {
+        if (this.drawnShapes) {
+            R.forEach(l => { this.map.leafletElement.removeLayer(l); },
+                this.drawnShapes.leafletElement.getLayers());
+        }
     }
 
     render() {
