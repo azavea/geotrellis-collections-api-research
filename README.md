@@ -51,11 +51,11 @@ Each of these API endpoints accepts a polygon geometry object posted from the cl
 
 | Path | Service |
 | --- | --- |
-| [/nlcdcount](http://localhost:7000/nlcdcount) | Returns NLCD cell counts arranged by type for AOI |
-| [/slopepercentagecount](http://localhost:7000/slopepercentagecount) | Returns slope percentage cell counts |
-| [/zonalhistogram](http://localhost:7000/zonalhistogram) | Returns zonal histogram results |
-| [/nlcdpngtile](http://localhost:7000/nlcdpngtile) | Returns an AOI-shaped PNG tile representing NLCD cell counts |
-| [/soilgeotiff](http://localhost:7000/soilgeotiff) | Returns an AOI-shaped GeoTiff representing soil count values |
+| `/nlcdcount` | Returns NLCD cell counts arranged by type for AOI |
+| `/slopepercentagecount` | Returns slope percentage cell counts |
+| `/soilgroupcount` | Returns SSUGRO hydrologic soil groups |
+| `/nlcdpngtile` | Returns an AOI-shaped PNG tile representing NLCD cell counts |
+| `/soilgeotiff` | Returns an AOI-shaped GeoTiff representing soil count values |
 
 ### Rake commands
 

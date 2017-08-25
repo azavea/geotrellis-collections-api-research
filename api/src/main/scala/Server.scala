@@ -73,6 +73,15 @@ object Server extends Geoprocessing {
             }
           }
         } ~
+        path("soilgroupcount") {
+          entity(as[GeoJsonData]) { shape =>
+            complete {
+              Future {
+                getSoilGroupCount(shape)
+              }
+            }
+          }
+        } ~
         path("zonalhistogram") {
           entity(as[GeoJsonData]) { shape =>
             complete {

@@ -9,7 +9,7 @@ export const apiServerURL = 'http://localhost:7000';
 export const apiEndpoints = [
     '/nlcdcount',
     '/slopepercentagecount',
-    '/zonalhistogram',
+    '/soilgroupcount',
     '/nlcdpngtile',
     '/soilgeotiff',
 ];

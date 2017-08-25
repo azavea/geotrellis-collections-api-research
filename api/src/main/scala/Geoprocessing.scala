@@ -27,6 +27,12 @@ trait Geoprocessing extends Utils {
     ResponseData(cellCount(rasterLayer, areaOfInterest))
   }
 
+  def getSoilGroupCount(aoi: GeoJsonData): ResponseData = {
+    val areaOfInterest = createAOIFromInput(aoi.geometry)
+    val rasterLayer = cropSingleRasterToAOI(soilGroupsRDD, areaOfInterest)
+    ResponseData(cellCount(rasterLayer, areaOfInterest))
+  }
+
   def getFocalStandardDeviation(aoi: GeoJsonData): ResponseData = {
     ResponseData(Map("hello" -> 1))
   }
