@@ -97,9 +97,9 @@ module.exports = {
     devServer: {
         historyApiFallback: {
             index: '/',
-            disableHostCheck: true,
             host: '0.0.0.0',
         },
+        disableHostCheck: true,
         hot: true,
         overlay: true,
         stats: 'minimal',
