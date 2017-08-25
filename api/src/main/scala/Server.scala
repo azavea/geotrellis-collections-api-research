@@ -16,10 +16,12 @@ import org.apache.log4j.Logger
 
 case class GeoJsonData(geometry: String)
 case class ResponseData(response: Map[String, Int])
+case class ResponseDataDouble(response: Map[String, Double])
 
 object RequestResponseProtocol extends DefaultJsonProtocol {
   implicit val requestFormat = jsonFormat1(GeoJsonData)
   implicit val responseFormat = jsonFormat1(ResponseData)
+  implicit val responseDoubleFormat = jsonFormat1(ResponseDataDouble)
 }
 
 object Server extends Geoprocessing {
@@ -105,6 +107,15 @@ object Server extends Geoprocessing {
             complete {
               Future {
                 getNLCDSlopeCount(shape)
+              }
+            }
+          }
+        } ~
+        path("soilslopekfactor") {
+          entity(as[GeoJsonData]) { shape =>
+            complete {
+              Future {
+                getSoilSlopeKFactor(shape)
               }
             }
           }

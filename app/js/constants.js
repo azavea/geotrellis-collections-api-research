@@ -13,6 +13,7 @@ export const apiEndpoints = [
     '/soilgroupslopecount',
     '/nlcdsoilgroupcount',
     '/nlcdslopecount',
+    '/soilslopekfactor',
     '/nlcdpngtile',
     '/soilgeotiff',
 ];
