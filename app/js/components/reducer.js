@@ -40,6 +40,7 @@ export default function appPage(state = initAppPageState, { type, payload }) {
         case CHANGE_API_ENDPOINT:
             return Object.assign({}, state, {
                 selectedApiEndpoint: payload,
+                data: null,
             });
         case START_PING_API:
             return Object.assign({}, state, {

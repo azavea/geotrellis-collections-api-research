@@ -51,7 +51,12 @@ export default class Map extends Component {
             selectedApiEndpoint,
         } = this.props;
 
-        const dataCard = data ? <DataCard data={data} /> : null;
+        const dataCard = data ? (
+            <DataCard
+                data={data}
+                selectedApiEndpoint={selectedApiEndpoint}
+            />) : null;
+
         const optionsCard = (
             <OptionsCard
                 dispatch={dispatch}
@@ -94,7 +99,7 @@ export default class Map extends Component {
 }
 
 Map.propTypes = {
-    data: PropTypes.string,
+    data: PropTypes.object,
     dispatch: PropTypes.func.isRequired,
     selectedApiEndpoint: PropTypes.string.isRequired,
 };

@@ -37,7 +37,7 @@ function startSubmitAreaOfInterest() {
 function completeSubmitAreaOfInterest({ response }) {
     return {
         type: COMPLETE_SUBMIT_AOI,
-        payload: JSON.stringify(response),
+        payload: response,
     };
 }
 
