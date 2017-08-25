@@ -15,3 +15,32 @@ export const apiEndpoints = [
     '/nlcdslopecount',
     '/soilslopekfactor',
 ];
+
+export const nlcdMap = {
+    11: 'Open water',
+    12: 'Perennial ice & snow',
+    21: 'Developed open',
+    22: 'Developed low',
+    23: 'Developed medium',
+    24: 'Developed high',
+    31: 'Barren land',
+    41: 'Deciduous forest',
+    42: 'Evergreen forest',
+    43: 'Mixed forest',
+    52: 'Scrub',
+    71: 'Grassland',
+    81: 'Pasture',
+    82: 'Cultivated crops',
+    90: 'Woody wetlands',
+    95: 'Herbacious wetlands',
+};
+
+export const soilGroupsMap = {
+    1: 'A',
+    2: 'B',
+    3: 'C',
+    4: 'D',
+    5: 'A/D',
+    6: 'B/D',
+    7: 'C/D',
+};

@@ -2,15 +2,9 @@ import React, { PropTypes } from 'react';
 import { VictoryPie } from 'victory';
 import R from 'ramda';
 
-const soilGroupsMap = {
-    1: 'A',
-    2: 'B',
-    3: 'C',
-    4: 'D',
-    5: 'A/D',
-    6: 'B/D',
-    7: 'C/D',
-};
+import {
+    soilGroupsMap,
+} from '../constants';
 
 export default function SoilGroupsChart({
     data,
