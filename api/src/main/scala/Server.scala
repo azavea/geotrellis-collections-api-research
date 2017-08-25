@@ -82,11 +82,29 @@ object Server extends Geoprocessing {
             }
           }
         } ~
-        path("zonalhistogram") {
+        path("soilgroupslopecount") {
           entity(as[GeoJsonData]) { shape =>
             complete {
               Future {
-                getZonalHistogram(shape).toJson
+                getSoilGroupSlopeCount(shape)
+              }
+            }
+          }
+        } ~
+        path("nlcdsoilgroupcount") {
+          entity(as[GeoJsonData]) { shape =>
+            complete {
+              Future {
+                getNLCDSoilGroupCount(shape)
+              }
+            }
+          }
+        } ~
+        path("nlcdslopecount") {
+          entity(as[GeoJsonData]) { shape =>
+            complete {
+              Future {
+                getNLCDSlopeCount(shape)
               }
             }
           }

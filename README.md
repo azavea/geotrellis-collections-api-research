@@ -54,6 +54,9 @@ Each of these API endpoints accepts a polygon geometry object posted from the cl
 | `/nlcdcount` | Returns NLCD cell counts arranged by type for AOI |
 | `/slopepercentagecount` | Returns slope percentage cell counts |
 | `/soilgroupcount` | Returns SSUGRO hydrologic soil groups |
+| `/soilgroupslopecount` | Returns cell counts for paired soil groups & slope percentages |
+| `/nlcdsoilgroupcount` | Returns cell counts for paired NLCD & soil groups |
+| `/nlcdslopecount` | Returns cell counts for paired NLCD & slope percentages |
 | `/nlcdpngtile` | Returns an AOI-shaped PNG tile representing NLCD cell counts |
 | `/soilgeotiff` | Returns an AOI-shaped GeoTiff representing soil count values |
 

@@ -18,27 +18,37 @@ trait Geoprocessing extends Utils {
   def getNLCDCount(aoi: GeoJsonData): ResponseData = {
     val areaOfInterest = createAOIFromInput(aoi.geometry)
     val rasterLayer = cropSingleRasterToAOI(nlcdRDD, areaOfInterest)
-    ResponseData(cellCount(rasterLayer, areaOfInterest))
+    ResponseData(cellCount(Seq(rasterLayer), areaOfInterest))
   }
 
   def getSlopePercentageCount(aoi: GeoJsonData): ResponseData = {
     val areaOfInterest = createAOIFromInput(aoi.geometry)
     val rasterLayer = cropSingleRasterToAOI(slopeRDD, areaOfInterest)
-    ResponseData(cellCount(rasterLayer, areaOfInterest))
+    ResponseData(cellCount(Seq(rasterLayer), areaOfInterest))
   }
 
   def getSoilGroupCount(aoi: GeoJsonData): ResponseData = {
     val areaOfInterest = createAOIFromInput(aoi.geometry)
     val rasterLayer = cropSingleRasterToAOI(soilGroupsRDD, areaOfInterest)
-    ResponseData(cellCount(rasterLayer, areaOfInterest))
+    ResponseData(cellCount(Seq(rasterLayer), areaOfInterest))
   }
 
-  def getFocalStandardDeviation(aoi: GeoJsonData): ResponseData = {
-    ResponseData(Map("hello" -> 1))
+  def getSoilGroupSlopeCount(aoi: GeoJsonData): ResponseData = {
+    val areaOfInterest = createAOIFromInput(aoi.geometry)
+    val rasterLayers = cropRastersToAOI(List(soilGroupsRDD, slopeRDD), areaOfInterest)
+    ResponseData(cellCount(rasterLayers, areaOfInterest))
   }
 
-  def getZonalHistogram(aoi: GeoJsonData): ResponseData = {
-    ResponseData(Map("hello" -> 1))
+  def getNLCDSoilGroupCount(aoi: GeoJsonData): ResponseData = {
+    val areaOfInterest = createAOIFromInput(aoi.geometry)
+    val rasterLayers = cropRastersToAOI(List(nlcdRDD, soilGroupsRDD), areaOfInterest)
+    ResponseData(cellCount(rasterLayers, areaOfInterest))
+  }
+
+  def getNLCDSlopeCount(aoi: GeoJsonData): ResponseData = {
+    val areaOfInterest = createAOIFromInput(aoi.geometry)
+    val rasterLayers = cropRastersToAOI(List(nlcdRDD, slopeRDD), areaOfInterest)
+    ResponseData(cellCount(rasterLayers, areaOfInterest))
   }
 
   def getPngTile(aoi: GeoJsonData): ResponseData = {
@@ -50,16 +60,16 @@ trait Geoprocessing extends Utils {
   }
 
   private def cellCount(
-    rasterLayer: TileLayerCollection[SpatialKey],
+    rasterLayers: Seq[TileLayerCollection[SpatialKey]],
     areaOfInterest: MultiPolygon
   ): Map[String, Int] = {
     val init = () => new LongAdder
     val update = (_: LongAdder).increment()
-    val metadata = rasterLayer.metadata
+    val metadata = rasterLayers.head.metadata
 
     val pixelGroups: TrieMap[List[Int], LongAdder] = TrieMap.empty
 
-    joinCollectionLayers(Seq(rasterLayer)).par
+    joinCollectionLayers(rasterLayers).par
       .foreach({ case (key, tiles) =>
         val extent = metadata.mapTransform(key)
         val re = RasterExtent(extent, metadata.layout.tileCols,
@@ -71,8 +81,11 @@ trait Geoprocessing extends Utils {
         }
       })
 
+    val listToString = (l: List[Int]) =>
+        if (l.length == 1) l.head.toString else l.toString
+
     pixelGroups
-      .map { case (k, v) => k.head.toString -> v.sum.toInt }
+      .map { case (k, v) => listToString(k) -> v.sum.toInt }
       .toMap
   }
 }
