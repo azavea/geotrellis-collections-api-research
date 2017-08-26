@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 
 import NLCDChart from './NLCDChart';
 import SoilGroupsChart from './SoilGroupsChart';
+import SlopePercentageChart from './SlopePercentageChart';
 
 export default function DataCard({
     data,
@@ -25,6 +26,17 @@ export default function DataCard({
                     Soil groups composition
                 </h4>
                 <SoilGroupsChart data={data} />
+            </div>
+        );
+    }
+
+    if (selectedApiEndpoint === '/slopepercentagecount') {
+        return (
+            <div className="pt-card pt-elevation-0 data-card">
+                <h4>
+                     Rounded slope percentage cell counts
+                </h4>
+                <SlopePercentageChart data={data} />
             </div>
         );
     }
