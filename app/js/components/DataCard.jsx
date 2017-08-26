@@ -6,8 +6,22 @@ import SlopePercentageChart from './SlopePercentageChart';
 
 export default function DataCard({
     data,
+    error,
     selectedApiEndpoint,
 }) {
+    if (error || !data) {
+        return (
+            <div className="pt-card pt-elevation-0 data-card">
+                <div>
+                    <span id="error-card-message">
+                        API error
+                    </span>
+                    <span id="error-card-icon" className="pt-icon-standard pt-icon-error" />
+                </div>
+            </div>
+        );
+    }
+
     if (selectedApiEndpoint === '/nlcdcount') {
         return (
             <div className="pt-card pt-elevation-0 data-card">
@@ -59,6 +73,7 @@ export default function DataCard({
 }
 
 DataCard.propTypes = {
-    data: PropTypes.object.isRequired,
+    data: PropTypes.object,
+    error: PropTypes.bool,
     selectedApiEndpoint: PropTypes.string.isRequired,
 };

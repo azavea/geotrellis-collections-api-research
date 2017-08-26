@@ -19,6 +19,8 @@ export const CHANGE_API_ENDPOINT = 'CHANGE_API_ENDPOINT';
 export const START_PING_API = 'START_PING_API';
 export const COMPLETE_PING_API = 'COMPLETE_PING_API';
 export const FAIL_PING_API = 'FAIL_PING_API';
+export const CLEAR_API_ERROR = 'CLEAR_API_ERROR';
+export const CLEAR_DATA = 'CLEAR_DATA';
 
 let cancelAxiosRequest = null;
 
@@ -51,6 +53,18 @@ function completeSubmitAreaOfInterest({ response }) {
 function failSubmitAreaOfInterest() {
     return {
         type: FAIL_SUBMIT_AOI,
+    };
+}
+
+export function clearAPIError() {
+    return {
+        type: CLEAR_API_ERROR,
+    };
+}
+
+export function clearData() {
+    return {
+        type: CLEAR_DATA,
     };
 }
 

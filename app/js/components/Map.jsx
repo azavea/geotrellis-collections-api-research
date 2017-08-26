@@ -7,6 +7,8 @@ import R from 'ramda';
 import {
     submitAreaOfInterest,
     clearAreaOfInterest,
+    clearAPIError,
+    clearData,
 } from './actions';
 
 import {
@@ -28,8 +30,20 @@ export default class Map extends Component {
     }
 
     componentDidMount() {
-        const { leafletElement: leafletMap } = this.map;
-        leafletMap.on('draw:drawstart', () => { this.clearShapes(); });
+        const {
+            map: {
+                leafletElement: leafletMap,
+            },
+            props: {
+                dispatch,
+            },
+        } = this;
+
+        leafletMap.on('draw:drawstart', () => {
+            this.clearShapes();
+            dispatch(clearData());
+            dispatch(clearAPIError());
+        });
     }
 
     componentWillReceiveProps({ selectedApiEndpoint }) {
@@ -58,11 +72,13 @@ export default class Map extends Component {
             data,
             dispatch,
             selectedApiEndpoint,
+            error,
         } = this.props;
 
-        const dataCard = data ? (
+        const dataCard = data || error ? (
             <DataCard
                 data={data}
+                error={error}
                 selectedApiEndpoint={selectedApiEndpoint}
             />) : <div />;
 
@@ -115,4 +131,5 @@ Map.propTypes = {
     data: PropTypes.object,
     dispatch: PropTypes.func.isRequired,
     selectedApiEndpoint: PropTypes.string.isRequired,
+    error: PropTypes.bool,
 };

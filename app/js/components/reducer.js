@@ -7,11 +7,14 @@ import {
     START_PING_API,
     COMPLETE_PING_API,
     FAIL_PING_API,
+    CLEAR_API_ERROR,
+    CLEAR_DATA,
 } from './actions';
 
 const initAppPageState = {
     fetching: false,
     data: null,
+    error: false,
     selectedApiEndpoint: '/nlcdcount',
     pong: true,
     sendingPing: false,
@@ -23,24 +26,37 @@ export default function appPage(state = initAppPageState, { type, payload }) {
             return Object.assign({}, state, {
                 data: null,
                 fetching: true,
+                error: false,
             });
         case COMPLETE_SUBMIT_AOI:
             return Object.assign({}, state, {
                 data: payload,
                 fetching: false,
+                error: false,
             });
         case FAIL_SUBMIT_AOI:
             return Object.assign({}, state, {
                 fetching: false,
+                error: true,
+            });
+        case CLEAR_API_ERROR:
+            return Object.assign({}, state, {
+                error: false,
+            });
+        case CLEAR_DATA:
+            return Object.assign({}, state, {
+                data: null,
             });
         case CLEAR_AOI:
             return Object.assign({}, state, {
                 data: null,
+                error: false,
             });
         case CHANGE_API_ENDPOINT:
             return Object.assign({}, state, {
                 selectedApiEndpoint: payload,
                 data: null,
+                error: false,
             });
         case START_PING_API:
             return Object.assign({}, state, {
