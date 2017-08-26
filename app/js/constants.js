@@ -33,6 +33,7 @@ export const nlcdMap = {
     82: 'Cultivated crops',
     90: 'Woody wetlands',
     95: 'Herbacious wetlands',
+    [-2147483648]: 'Unknown',
 };
 
 export const soilGroupsMap = {
@@ -43,4 +44,5 @@ export const soilGroupsMap = {
     5: 'A/D',
     6: 'B/D',
     7: 'C/D',
+    [-2147483648]: 'Unknown',
 };
