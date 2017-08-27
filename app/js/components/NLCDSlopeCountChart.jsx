@@ -6,20 +6,11 @@ import {
     nlcdMap,
 } from '../constants';
 
-function splitNLCDSlopeKey(key) {
-    return R.map(x => parseInt(x, 10), R.split(',',
-        R.replace(/List/, '', key).slice(1, -1)));
-}
-
-function roundToTens(x) {
-    return x > 100 ? 100 : Math.round(x / 10) * 10;
-}
-
-function coalesceData(acc, [key, value]) {
-    return Object.assign({}, acc, {
-        [key]: acc[key] ? acc[key] + value : value,
-    });
-}
+import {
+    coalesceData,
+    roundToTens,
+    splitKey,
+} from '../utils';
 
 export default function NLCDSlopeCountChart({
     data,
@@ -30,7 +21,7 @@ export default function NLCDSlopeCountChart({
         R.reduce(coalesceData, {},
         R.map(([count, [nlcdID, slope]]) =>
             [[nlcdMap[nlcdID], roundToTens(slope)], count],
-        R.map(([k, y]) => ([y, splitNLCDSlopeKey(k)]),
+        R.map(([k, y]) => ([y, splitKey(k)]),
         R.toPairs(data))))));
 
     return (
