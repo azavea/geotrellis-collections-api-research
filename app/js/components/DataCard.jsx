@@ -4,6 +4,7 @@ import NLCDChart from './NLCDChart';
 import SoilGroupsChart from './SoilGroupsChart';
 import SlopePercentageChart from './SlopePercentageChart';
 import SoilGroupsSlopeChart from './SoilGroupsSlopeChart';
+import NLCDSlopeCountChart from './NLCDSlopeCountChart';
 
 export default function DataCard({
     data,
@@ -63,6 +64,17 @@ export default function DataCard({
                     Soil group slope percentages
                 </h4>
                 <SoilGroupsSlopeChart data={data} />
+            </div>
+        );
+    }
+
+    if (selectedApiEndpoint === '/nlcdslopecount') {
+        return (
+            <div className="pt-card pt-elevation-0 data-card">
+                <h4>
+                    NLCD category slope percentages
+                </h4>
+                <NLCDSlopeCountChart data={data} />
             </div>
         );
     }
