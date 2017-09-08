@@ -40,12 +40,6 @@ trait Geoprocessing extends Utils {
     ResponseData(cellCount(rasterLayers, areaOfInterest))
   }
 
-  def getNLCDSoilGroupCount(aoi: GeoJsonData): ResponseData = {
-    val areaOfInterest = createAOIFromInput(aoi.geometry)
-    val rasterLayers = cropRastersToAOI(List(nlcdRDD, soilGroupsRDD), areaOfInterest)
-    ResponseData(cellCount(rasterLayers, areaOfInterest))
-  }
-
   def getNLCDSlopeCount(aoi: GeoJsonData): ResponseData = {
     val areaOfInterest = createAOIFromInput(aoi.geometry)
     val rasterLayers = cropRastersToAOI(List(nlcdRDD, slopeRDD), areaOfInterest)

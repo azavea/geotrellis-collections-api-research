@@ -47,16 +47,6 @@ object Server extends Geoprocessing {
         }
       } ~
       post {
-        pathSingleSlash {
-          complete("""
-            POST GeoJSON shapes to:
-            /nlcdcount
-            /slopepercentagecount
-            /zonalhistogram
-            /pngtile
-            /geotiff
-            """.stripMargin)
-        } ~
         path("nlcdcount") {
           entity(as[GeoJsonData]) { shape =>
             complete {
@@ -89,15 +79,6 @@ object Server extends Geoprocessing {
             complete {
               Future {
                 getSoilGroupSlopeCount(shape)
-              }
-            }
-          }
-        } ~
-        path("nlcdsoilgroupcount") {
-          entity(as[GeoJsonData]) { shape =>
-            complete {
-              Future {
-                getNLCDSoilGroupCount(shape)
               }
             }
           }

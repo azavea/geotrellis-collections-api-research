@@ -17,7 +17,7 @@ export default function SoilGroupsChart({
             width={300}
             colorScale="heatmap"
             data={chartData}
-            labels={({ x }) => soilGroupsMap[parseInt(x, 10)] || 'Unknown'}
+            labels={({ x }) => soilGroupsMap[parseInt(x, 10)] || '?'}
         />
     );
 }

@@ -4,12 +4,6 @@ import {
     apiServerURL,
 } from '../constants';
 
-import {
-    nlcdSoilCountMockData,
-    slopeCountMockData,
-    soilSlopeKFactorMockData,
-    soilSlopeCountMockData,
-} from './mockData';
 
 export const START_SUBMIT_AOI = 'START_SUBMIT_AOI';
 export const COMPLETE_SUBMIT_AOI = 'COMPLETE_SUBMIT_AOI';
@@ -73,6 +67,7 @@ export function submitAreaOfInterest({ geometry }) {
     return (dispatch, getState) => {
         dispatch(startSubmitAreaOfInterest());
         const { appPage: { selectedApiEndpoint } } = getState();
+        /*
         switch (selectedApiEndpoint) {
             case '/slopepercentagecount':
                 return dispatch(completeSubmitAreaOfInterest({
@@ -93,6 +88,7 @@ export function submitAreaOfInterest({ geometry }) {
             default:
                 break;
         }
+        */
 
         axios.post(`${apiServerURL}${selectedApiEndpoint}`,
             JSON.stringify({ geometry: JSON.stringify(geometry) }),
