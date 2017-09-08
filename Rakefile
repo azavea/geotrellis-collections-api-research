@@ -1,9 +1,22 @@
 task default: %[build]
 
-desc "Build app & api"
+desc "Install app dependencies"
 task :build do
     puts "Building app container ->"
     sh "docker-compose -f docker-compose.yml run --rm --no-deps app yarn"
+end
+
+desc "Compile app & api"
+task :compile do
+    puts "Bundling app ->"
+    Dir.chdir('./app') do
+        sh "npm install"
+        sh "npm run bundle"
+    end
+    puts "Compiling api ->"
+    Dir.chdir('./api') do
+        sh "./sbt compile"
+    end
 end
 
 desc "Log in to container shell"

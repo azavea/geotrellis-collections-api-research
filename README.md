@@ -1,5 +1,7 @@
 # geotrellis-collections-api-research
 
+[![Build Status](https://travis-ci.org/azavea/geotrellis-collections-api-research.svg?branch=master)](https://travis-ci.org/azavea/geotrellis-collections-api-research)
+
 A research project to set up and use GeoTrellis as a REST service.
 
 ![current demo](demo.gif)
@@ -64,7 +66,8 @@ Each of these API endpoints accepts a polygon geometry object posted from the cl
 
 | Command | Description |
 | --- | --- |
-| `rake build` | Build app container |
+| `rake build` | Install app container npm dependencies |
+| `rake compile` | Compile app & api |
 | `rake console app` | Log into app container shell |
 | `rake console api` | Log into API with `./sbt console` |
 | `rake sbt` | Start API with `./sbt ~reStart` |
