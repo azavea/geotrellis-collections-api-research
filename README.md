@@ -8,8 +8,8 @@ A research project to set up and use GeoTrellis as a REST service.
 
 ### Requirements
 
+* Make
 * Docker
-* Rake
 * sbt
 
 ### Getting started
@@ -19,7 +19,7 @@ A research project to set up and use GeoTrellis as a REST service.
 Clone the project, ensure Docker's running, then run:
 
 ```sh
-rake
+make
 ```
 
 This will build the app client & compile the API service.
@@ -35,7 +35,7 @@ represents your credentials.
 To start the app & API servers, run:
 
 ```
-rake server
+make server
 ```
 
 This will start servers to run the app on port `9555` and the API on port `7000`.
@@ -62,14 +62,13 @@ Each of these API endpoints accepts a polygon geometry object posted from the cl
 | `/nlcdpngtile` | Returns an AOI-shaped PNG tile representing NLCD cell counts |
 | `/soilgeotiff` | Returns an AOI-shaped GeoTiff representing soil count values |
 
-### Rake commands
+### Make rules
 
-| Command | Description |
+| Rule | Description |
 | --- | --- |
-| `rake build` | Install app container npm dependencies |
-| `rake compile` | Compile app & api |
-| `rake console app` | Log into app container shell |
-| `rake console api` | Log into API with `./sbt console` |
-| `rake sbt` | Start API with `./sbt ~reStart` |
-| `rake server` | Start app container & API service |
-| `rake tmux` | Setup project Tmuxinator configuration |
+| `make build` | Install app container npm dependencies |
+| `make compile` | Compile app & api for CI |
+| `make app-console` | Log into app container shell |
+| `make api-console` | Log into API with `./sbt console` |
+| `make restart` | Start API with `./sbt ~reStart` |
+| `make server` | Start app container & API service |
