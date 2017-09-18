@@ -11,6 +11,7 @@ A research project to set up and use GeoTrellis as a REST service.
 * Make
 * Docker
 * sbt
+* Spark
 
 ### Getting started
 
@@ -29,6 +30,17 @@ This will build the app client & compile the API service.
 To run the API you'll need credentials for accessing Azavea's raster data sets.
 Set them by running `aws configure --profile <PROFILE>` where `<PROFILE>`
 represents your credentials.
+
+To ingest the NLCD Pennslvania 1992 dataset, [download the file](http://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=339), unzip it and save the `.tif` file in `./ingest/land-cover-data/geotiff`, then run
+
+```sh
+make ingest
+```
+
+Note that this command requires that you have Spark installed locally with
+`spark-submit` on your path.
+
+The resulting RDD will save to `./ingest/land-cover-data/catalog`.
 
 #### Server
 
@@ -72,3 +84,4 @@ Each of these API endpoints accepts a polygon geometry object posted from the cl
 | `make api-console` | Log into API with `./sbt console` |
 | `make restart` | Start API with `./sbt ~reStart` |
 | `make server` | Start app container & API service |
+| `make ingest` | Ingest Pennsylvania NLCD GeoTiff into GeoTrellis RDD |
