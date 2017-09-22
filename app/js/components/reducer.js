@@ -1,3 +1,5 @@
+import R from 'ramda';
+
 import {
     START_SUBMIT_AOI,
     COMPLETE_SUBMIT_AOI,
@@ -11,13 +13,19 @@ import {
     CLEAR_DATA,
 } from './actions';
 
+import {
+    apiEndpoints,
+} from '../constants';
+
 const initAppPageState = {
     fetching: false,
     data: null,
     error: false,
-    selectedApiEndpoint: '/nlcdcount',
+    errorMessage: null,
+    selectedApiEndpoint: R.head(apiEndpoints),
     pong: true,
     sendingPing: false,
+    areaOfInterest: null,
 };
 
 export default function appPage(state = initAppPageState, { type, payload }) {
@@ -27,17 +35,21 @@ export default function appPage(state = initAppPageState, { type, payload }) {
                 data: null,
                 fetching: true,
                 error: false,
+                errorMessage: null,
+                areaOfInterest: payload,
             });
         case COMPLETE_SUBMIT_AOI:
             return Object.assign({}, state, {
                 data: payload,
                 fetching: false,
                 error: false,
+                errorMessage: null,
             });
         case FAIL_SUBMIT_AOI:
             return Object.assign({}, state, {
                 fetching: false,
                 error: true,
+                errorMessage: payload,
             });
         case CLEAR_API_ERROR:
             return Object.assign({}, state, {
@@ -51,6 +63,7 @@ export default function appPage(state = initAppPageState, { type, payload }) {
             return Object.assign({}, state, {
                 data: null,
                 error: false,
+                areaOfInterest: null,
             });
         case CHANGE_API_ENDPOINT:
             return Object.assign({}, state, {

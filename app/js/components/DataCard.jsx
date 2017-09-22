@@ -9,6 +9,7 @@ import NLCDSlopeCountChart from './NLCDSlopeCountChart';
 export default function DataCard({
     data,
     error,
+    errorMessage,
     selectedApiEndpoint,
 }) {
     if (error || !data) {
@@ -16,7 +17,7 @@ export default function DataCard({
             <div className="pt-card pt-elevation-0 data-card">
                 <div>
                     <span id="error-card-message">
-                        API error
+                        {errorMessage || 'API Error'}
                     </span>
                     <span id="error-card-icon" className="pt-icon-standard pt-icon-error" />
                 </div>
@@ -99,5 +100,6 @@ export default function DataCard({
 DataCard.propTypes = {
     data: PropTypes.object,
     error: PropTypes.bool,
+    errorMessage: PropTypes.string,
     selectedApiEndpoint: PropTypes.string.isRequired,
 };

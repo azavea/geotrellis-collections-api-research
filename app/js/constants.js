@@ -1,18 +1,13 @@
 export const isDevelopment = process.env.NODE_ENV === 'development';
-export const defaultMapCenter = [39.961352, -75.154334];
-export const defaultZoomLevel = 8;
+export const defaultMapCenter = [40.7934, -77.8600];
+export const defaultZoomLevel = 7;
 export const tiles = 'http://{s}.tile.openstreetmap.se/hydda/base/{z}/{x}/{y}.png';
 export const attribution = `Tiles courtesy of <a href="http://openstreetmap.se/"
     target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy;
     <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>`;
 export const apiServerURL = 'http://localhost:7000';
 export const apiEndpoints = [
-    '/nlcdcount',
-    '/slopepercentagecount',
-    '/soilgroupcount',
-    '/soilgroupslopecount',
-    '/nlcdslopecount',
-    '/soilslopekfactor',
+    '/panlcdcount',
 ];
 
 export const nlcdMap = {
@@ -32,16 +27,5 @@ export const nlcdMap = {
     82: 'Cultivated crops',
     90: 'Woody wetlands',
     95: 'Herbacious wetlands',
-    [-2147483648]: '?',
-};
-
-export const soilGroupsMap = {
-    1: 'A',
-    2: 'B',
-    3: 'C',
-    4: 'D',
-    5: 'A/D',
-    6: 'B/D',
-    7: 'C/D',
     [-2147483648]: '?',
 };

@@ -89,6 +89,10 @@ module.exports = {
             use: 'url-loader',
         },
         {
+            test: /\.(geojson|json)$/,
+            loader: 'json-loader',
+        },
+        {
             test: /\.jsx?/,
             exclude: [/node_modules/, /\.json$/],
             loader: 'eslint-loader',
@@ -108,6 +112,6 @@ module.exports = {
         },
     },
     resolve: {
-        extensions: ['.js', '.jsx'],
+        extensions: ['.js', '.jsx', '.json'],
     },
 };

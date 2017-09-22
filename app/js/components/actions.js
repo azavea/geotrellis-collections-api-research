@@ -1,9 +1,11 @@
 import axios, { CancelToken } from 'axios';
+import turfContains from '@turf/boolean-contains';
 
 import {
     apiServerURL,
 } from '../constants';
 
+import pennsylvaniaBoundaries from '../pennsylvaniaBoundaries';
 
 export const START_SUBMIT_AOI = 'START_SUBMIT_AOI';
 export const COMPLETE_SUBMIT_AOI = 'COMPLETE_SUBMIT_AOI';
@@ -31,9 +33,10 @@ export function clearAreaOfInterest() {
     };
 }
 
-function startSubmitAreaOfInterest() {
+function startSubmitAreaOfInterest(aoi) {
     return {
         type: START_SUBMIT_AOI,
+        payload: aoi,
     };
 }
 
@@ -44,9 +47,10 @@ function completeSubmitAreaOfInterest({ response }) {
     };
 }
 
-function failSubmitAreaOfInterest() {
+function failSubmitAreaOfInterest(reason) {
     return {
         type: FAIL_SUBMIT_AOI,
+        payload: reason,
     };
 }
 
@@ -62,36 +66,19 @@ export function clearData() {
     };
 }
 
-export function submitAreaOfInterest({ geometry }) {
+export function submitAreaOfInterest(aoi) {
     cancelPriorRequest();
     return (dispatch, getState) => {
-        dispatch(startSubmitAreaOfInterest());
-        const { appPage: { selectedApiEndpoint } } = getState();
-        /*
-        switch (selectedApiEndpoint) {
-            case '/slopepercentagecount':
-                return dispatch(completeSubmitAreaOfInterest({
-                    response: JSON.parse(slopeCountMockData),
-                }));
-            case '/soilgroupslopecount':
-                return dispatch(completeSubmitAreaOfInterest({
-                    response: JSON.parse(soilSlopeCountMockData),
-                }));
-            case '/nlcdsoilgroupcount':
-                return dispatch(completeSubmitAreaOfInterest({
-                    response: JSON.parse(nlcdSoilCountMockData),
-                }));
-            case '/soilslopekfactor':
-                return dispatch(completeSubmitAreaOfInterest({
-                    response: JSON.parse(soilSlopeKFactorMockData),
-                }));
-            default:
-                break;
+        dispatch(startSubmitAreaOfInterest(aoi));
+        const { geometry: paGeom } = pennsylvaniaBoundaries.features[0];
+        if (!turfContains(paGeom, aoi)) {
+            const errorMessage = 'Drawn shape must be within Pennsylvania';
+            return dispatch(failSubmitAreaOfInterest(errorMessage));
         }
-        */
 
+        const { appPage: { selectedApiEndpoint } } = getState();
         axios.post(`${apiServerURL}${selectedApiEndpoint}`,
-            JSON.stringify({ geometry: JSON.stringify(geometry) }),
+            JSON.stringify({ geometry: JSON.stringify(aoi.geometry) }),
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -99,7 +86,7 @@ export function submitAreaOfInterest({ geometry }) {
                 cancelToken: new CancelToken((c) => { cancelAxiosRequest = c; }),
             })
              .then(({ data }) => dispatch(completeSubmitAreaOfInterest(data)))
-             .catch(() => dispatch(failSubmitAreaOfInterest()));
+             .catch(() => dispatch(failSubmitAreaOfInterest('API error')));
 
         return () => {};
     };

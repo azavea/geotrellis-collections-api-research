@@ -20,6 +20,7 @@ class App extends Component {
             selectedApiEndpoint,
             pong,
             error,
+            errorMessage,
         } = this.props;
 
         return (
@@ -34,6 +35,7 @@ class App extends Component {
                         dispatch={dispatch}
                         selectedApiEndpoint={selectedApiEndpoint}
                         error={error}
+                        errorMessage={errorMessage}
                     />
                 </div>
             </div>
@@ -46,8 +48,10 @@ App.propTypes = {
     data: PropTypes.object,
     fetching: PropTypes.bool,
     error: PropTypes.bool,
+    errorMessage: PropTypes.string,
     selectedApiEndpoint: PropTypes.string.isRequired,
     pong: PropTypes.bool.isRequired,
+    areaOfInterest: PropTypes.object,
 };
 
 function mapStateToProps({
@@ -55,6 +59,7 @@ function mapStateToProps({
         data,
         fetching,
         error,
+        errorMessage,
         selectedApiEndpoint,
         pong,
     },
@@ -65,6 +70,7 @@ function mapStateToProps({
         error,
         selectedApiEndpoint,
         pong,
+        errorMessage,
     };
 }
 

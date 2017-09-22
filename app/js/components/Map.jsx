@@ -1,5 +1,11 @@
 import React, { Component, PropTypes } from 'react';
-import { Map as ReactLeafletMap, TileLayer, FeatureGroup, ZoomControl } from 'react-leaflet';
+import {
+    Map as ReactLeafletMap,
+    TileLayer,
+    FeatureGroup,
+    ZoomControl,
+    GeoJSON,
+} from 'react-leaflet';
 import Control from 'react-leaflet-control';
 import { EditControl } from 'react-leaflet-draw';
 import R from 'ramda';
@@ -17,6 +23,8 @@ import {
     tiles,
     attribution,
 } from '../constants';
+
+import pennsylvaniaBoundaries from '../pennsylvaniaBoundaries';
 
 import DataCard from './DataCard';
 import OptionsCard from './OptionsCard';
@@ -73,12 +81,14 @@ export default class Map extends Component {
             dispatch,
             selectedApiEndpoint,
             error,
+            errorMessage,
         } = this.props;
 
         const dataCard = data || error ? (
             <DataCard
                 data={data}
                 error={error}
+                errorMessage={errorMessage}
                 selectedApiEndpoint={selectedApiEndpoint}
             />) : <div />;
 
@@ -87,6 +97,13 @@ export default class Map extends Component {
                 dispatch={dispatch}
                 selectedApiEndpoint={selectedApiEndpoint}
             />);
+
+        const paBoundariesLayer = (
+            <GeoJSON
+                data={pennsylvaniaBoundaries}
+                style={{ fill: false, color: '#FF5733' }}
+            />
+        );
 
         return (
             <ReactLeafletMap
@@ -99,6 +116,7 @@ export default class Map extends Component {
                     attribution={attribution}
                     url={tiles}
                 />
+                {paBoundariesLayer}
                 <ZoomControl position="topright" />
                 <FeatureGroup
                     ref={f => { this.drawnShapes = f; }}
@@ -132,4 +150,5 @@ Map.propTypes = {
     dispatch: PropTypes.func.isRequired,
     selectedApiEndpoint: PropTypes.string.isRequired,
     error: PropTypes.bool,
+    errorMessage: PropTypes.string,
 };
