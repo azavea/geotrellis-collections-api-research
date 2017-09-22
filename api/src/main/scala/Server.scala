@@ -47,6 +47,15 @@ object Server extends Geoprocessing {
         }
       } ~
       post {
+        path("panlcdcount") {
+          entity(as[GeoJsonData]) { shape =>
+            complete {
+              Future {
+                getPANLCDCount(shape)
+              }
+            }
+          }
+        } ~
         path("nlcdcount") {
           entity(as[GeoJsonData]) { shape =>
             complete {

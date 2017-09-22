@@ -11,22 +11,22 @@ bundle-app:
 	bash -c "trap 'cd ..' EXIT; cd app; npm install; npm run bundle"
 
 compile-api:
-	bash -c "trap 'cd ..' EXIT; cd api; ./sbt compile"
+	bash -c "trap 'cd ..' EXIT; cd api; sbt compile"
 
 app-server:
 	docker-compose up -d app
 
 api-server:
-	bash -c "trap 'cd ..' EXIT; cd api; ./sbt ~reStart"
+	bash -c "trap 'cd ..' EXIT; cd api; sbt ~reStart"
 
 app-console:
 	docker-compose exec app /bin/bash
 
 api-console:
-	bash -c "trap 'cd ..' EXIT; cd api; ./sbt console"
+	bash -c "trap 'cd ..' EXIT; cd api; sbt console"
 
 assembly:
-	bash -c "trap 'cd ..' EXIT; cd api; ./sbt assembly"
+	bash -c "trap 'cd ..' EXIT; cd api; sbt assembly"
 
 compile: bundle-app compile-api compile-ingest
 
@@ -37,10 +37,10 @@ server: app-server api-server
 setup: build ingest server
 
 ingest-assembly:
-	bash -c "trap 'cd ..' EXIT; cd ingest; ./sbt assembly"
+	bash -c "trap 'cd ..' EXIT; cd ingest; sbt assembly"
 
 compile-ingest:
-	bash -c "trap 'cd ..' EXIT; cd ingest; ./sbt compile"
+	bash -c "trap 'cd ..' EXIT; cd ingest; sbt compile"
 
 ingest: ingest-assembly
 	bash -c "trap 'cd ..' EXIT; cd ingest; spark-submit --name \"NLCDPA Ingest\" \

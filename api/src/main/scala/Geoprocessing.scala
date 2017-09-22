@@ -10,11 +10,18 @@ import geotrellis.vector._
 import geotrellis.vector.io._
 import geotrellis.spark._
 
-trait Geoprocessing extends Utils {
+trait Geoprocessing extends Utils with GeoTiffUtils {
   val nlcdRDD = "nlcd-2011-30m-epsg5070-0.10.0"
   val soilGroupsRDD = "ssurgo-hydro-groups-30m-epsg5070-0.10.0"
   val slopeRDD = "us-percent-slope-30m-epsg5070"
   val kFactorRDD = "us-ssugro-kfactor-30m-epsg5070"
+
+  def getPANLCDCount(aoi: GeoJsonData): ResponseData = {
+    val areaOfInterest = createAOIFromInput(aoi.geometry)
+    // val rasterLayer = cropPANLCDToAOI(areaOfInterest)
+    // println(rasterLayer.metadata)
+    ResponseData(Map("hello" -> 1))
+  }
 
   def getNLCDCount(aoi: GeoJsonData): ResponseData = {
     val areaOfInterest = createAOIFromInput(aoi.geometry)
