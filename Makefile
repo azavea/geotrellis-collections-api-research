@@ -34,7 +34,7 @@ restart: api-server
 
 server: app-server api-server
 
-setup: build server
+setup: build ingest server
 
 ingest-assembly:
 	bash -c "trap 'cd ..' EXIT; cd ingest; ./sbt assembly"
