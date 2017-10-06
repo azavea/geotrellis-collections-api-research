@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {
     Map as ReactLeafletMap,
-    TileLayer,
     FeatureGroup,
     ZoomControl,
     GeoJSON,
@@ -9,6 +8,7 @@ import {
 import Control from 'react-leaflet-control';
 import { EditControl } from 'react-leaflet-draw';
 import R from 'ramda';
+import esri from 'esri-leaflet';
 
 import {
     submitAreaOfInterest,
@@ -20,8 +20,6 @@ import {
 import {
     defaultMapCenter,
     defaultZoomLevel,
-    tiles,
-    attribution,
 } from '../constants';
 
 import pennsylvaniaBoundaries from '../pennsylvaniaBoundaries';
@@ -46,6 +44,8 @@ export default class Map extends Component {
                 dispatch,
             },
         } = this;
+
+        esri.basemapLayer('Imagery').addTo(leafletMap);
 
         leafletMap.on('draw:drawstart', () => {
             this.clearShapes();
@@ -112,10 +112,6 @@ export default class Map extends Component {
                 zoomControl={false}
                 ref={l => { this.map = l; }}
             >
-                <TileLayer
-                    attribution={attribution}
-                    url={tiles}
-                />
                 {paBoundariesLayer}
                 <ZoomControl position="topright" />
                 <FeatureGroup

@@ -19,6 +19,7 @@
   "dependencies": {
     "axios": "0.15.3",
     "@blueprintjs/core": "1.19.0",
+    "esri-leaflet": "2.1.1",
     "leaflet": "1.0.3",
     "leaflet-draw": "0.4.9",
     "ramda": "0.24.1",
