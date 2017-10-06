@@ -48,7 +48,7 @@ object LandCoverIngest {
           geoTiffRDD
             .tileToLayout(metadata, NearestNeighbor)
             .mapValues { tile => tile.convert(ByteConstantNoDataCellType) },
-          metadata)
+          metadata.copy(cellType = ByteConstantNoDataCellType))
 
       val paLandCoverLayerID = LayerId("nlcd-pennsylvania", 0)
 
@@ -58,41 +58,4 @@ object LandCoverIngest {
         sc.stop()
     }
   }
-
-  val testAOI = """
-  {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -75.26458740234375,
-              40.01394257474289
-            ],
-            [
-              -75.22064208984375,
-              39.953964380766394
-            ],
-            [
-              -75.22682189941406,
-              39.908682835132836
-            ],
-            [
-              -75.17807006835938,
-              39.91026292816486
-            ],
-            [
-              -75.16983032226562,
-              40.00973529662184
-            ],
-            [
-              -75.20278930664062,
-              40.06598617640718
-            ],
-            [
-              -75.26458740234375,
-              40.01394257474289
-            ]
-          ]
-        ]
-      }""".parseGeoJson[Polygon]
 }

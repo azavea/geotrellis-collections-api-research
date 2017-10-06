@@ -56,61 +56,7 @@ object Server extends Geoprocessing {
             }
           }
         } ~
-        path("nlcdcount") {
-          entity(as[GeoJsonData]) { shape =>
-            complete {
-              Future {
-                getNLCDCount(shape)
-              }
-            }
-          }
-        } ~
-        path("slopepercentagecount") {
-          entity(as[GeoJsonData]) { shape =>
-            complete {
-              Future {
-                getSlopePercentageCount(shape)
-              }
-            }
-          }
-        } ~
-        path("soilgroupcount") {
-          entity(as[GeoJsonData]) { shape =>
-            complete {
-              Future {
-                getSoilGroupCount(shape)
-              }
-            }
-          }
-        } ~
-        path("soilgroupslopecount") {
-          entity(as[GeoJsonData]) { shape =>
-            complete {
-              Future {
-                getSoilGroupSlopeCount(shape)
-              }
-            }
-          }
-        } ~
-        path("nlcdslopecount") {
-          entity(as[GeoJsonData]) { shape =>
-            complete {
-              Future {
-                getNLCDSlopeCount(shape)
-              }
-            }
-          }
-        } ~
-        path("soilslopekfactor") {
-          entity(as[GeoJsonData]) { shape =>
-            complete {
-              Future {
-                getSoilSlopeKFactor(shape)
-              }
-            }
-          }
-        } ~
-        path("nlcdpngtile") {
+        path("panlcdpngtile") {
           entity(as[GeoJsonData]) { shape =>
             complete {
               Future {
@@ -119,7 +65,7 @@ object Server extends Geoprocessing {
             }
           }
         } ~
-        path("soilgeotiff") {
+        path("panlcdgeotiff") {
           entity(as[GeoJsonData]) { shape =>
             complete {
               Future {

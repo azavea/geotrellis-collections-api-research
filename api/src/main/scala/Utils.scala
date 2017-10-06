@@ -1,32 +1,43 @@
-// adapted from https://github.com/WikiWatershed/mmw-geoprocessing/blob/develop/api/src/main/scala/Utils.scal
-
 import geotrellis.proj4.{CRS, ConusAlbers, LatLng}
-
+import geotrellis.raster._
+import geotrellis.raster.resample._
+import geotrellis.spark._
+import geotrellis.spark.tiling._
+import geotrellis.spark.io._
+import geotrellis.spark.io.file._
+import geotrellis.spark.io.hadoop._
+import geotrellis.spark.io.kryo.KryoRegistrator
+import geotrellis.vector._
+import geotrellis.vector.io._
+import org.apache.spark._
+import org.apache.spark.rdd.RDD
+import org.apache.spark.serializer.KryoSerializer
+import org.apache.spark.HashPartitioner
 import spray.json._
 import spray.json.DefaultJsonProtocol._
 
-import geotrellis.raster._
-import geotrellis.raster.rasterize._
-import geotrellis.vector._
-import geotrellis.vector.io._
-import geotrellis.spark._
-import geotrellis.spark.io._
-import geotrellis.spark.io.s3._
-
 trait Utils {
-  val baseLayerReader = S3CollectionLayerReader("datahub-catalogs-us-east-1", "")
+  val conf = new SparkConf()
+      .setIfMissing("spark.master", "local[*]")
+      .setAppName("Read PA NLCD GeoTiff")
+      .set("spark.serializer", classOf[KryoSerializer].getName)
+      .set("spark.kryo.registrator", classOf[KryoRegistrator].getName)
 
-  def cropSingleRasterToAOI(
-    rasterId: String,
-    aoi: MultiPolygon
-  ): TileLayerCollection[SpatialKey] =
-    fetchCroppedLayer(LayerId(rasterId, 0), aoi)
+  implicit val sc = new SparkContext(conf)
 
-  def cropRastersToAOI(
-    rasterIds: List[String],
-    aoi: MultiPolygon
-  ): Seq[TileLayerCollection[SpatialKey]] =
-    rasterIds.map { rasterId => cropSingleRasterToAOI(rasterId, aoi)}
+  val localCatalogPath =
+      new java.io.File(new java.io.File(".").getCanonicalFile,
+        "../ingest/land-cover-data/catalog").getAbsolutePath
+  val localFileReader = FileLayerReader(localCatalogPath)
+  val paNLCDLayerID = LayerId("nlcd-pennsylvania", 0)
+
+  def fetchLocalCroppedPANLCDLayer(
+    shape: MultiPolygon
+  ): RDD[(SpatialKey, Tile)] with Metadata[TileLayerMetadata[SpatialKey]] =
+    localFileReader
+      .query[SpatialKey, Tile, TileLayerMetadata[SpatialKey]](paNLCDLayerID)
+      .where(Intersects(shape))
+      .result
 
   def createAOIFromInput(polygon: String): MultiPolygon = parseGeometry(polygon)
 
@@ -36,26 +47,4 @@ trait Utils {
       case _ => throw new Exception("Invalid shape")
     }
   }
-
-  def joinCollectionLayers(
-    layers: Seq[TileLayerCollection[SpatialKey]]
-  ): Map[SpatialKey, Seq[Tile]] = {
-    val maps: Seq[Map[SpatialKey, Tile]] = layers.map((_: Seq[(SpatialKey, Tile)]).toMap)
-    val keySet: Array[SpatialKey] = maps.map(_.keySet).reduce(_ union _).toArray
-    for (
-      key: SpatialKey <- keySet
-    ) yield {
-      val tiles: Seq[Tile] = maps.map(_.apply(key))
-      key -> tiles
-    }
-  }.toMap
-
-  def fetchCroppedLayer(
-    layerId: LayerId,
-    shape: MultiPolygon
-  ): TileLayerCollection[SpatialKey] =
-    baseLayerReader
-      .query[SpatialKey, Tile, TileLayerMetadata[SpatialKey]](layerId)
-      .where(Intersects(shape))
-      .result
 }

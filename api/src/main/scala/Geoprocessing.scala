@@ -1,63 +1,17 @@
 // adapted from https://github.com/WikiWatershed/mmw-geoprocessing/blob/develop/api/src/main/scala/Geoprocessing.scala
 
-import java.util.concurrent.atomic.{DoubleAdder, LongAdder}
-
-import collection.concurrent.TrieMap
-
 import geotrellis.raster._
 import geotrellis.raster.rasterize._
 import geotrellis.vector._
 import geotrellis.vector.io._
 import geotrellis.spark._
+import org.apache.spark.rdd.RDD
 
-trait Geoprocessing extends Utils with GeoTiffUtils {
-  val nlcdRDD = "nlcd-2011-30m-epsg5070-0.10.0"
-  val soilGroupsRDD = "ssurgo-hydro-groups-30m-epsg5070-0.10.0"
-  val slopeRDD = "us-percent-slope-30m-epsg5070"
-  val kFactorRDD = "us-ssugro-kfactor-30m-epsg5070"
-
+trait Geoprocessing extends Utils {
   def getPANLCDCount(aoi: GeoJsonData): ResponseData = {
     val areaOfInterest = createAOIFromInput(aoi.geometry)
-    // val rasterLayer = cropPANLCDToAOI(areaOfInterest)
-    // println(rasterLayer.metadata)
-    ResponseData(Map("hello" -> 1))
-  }
-
-  def getNLCDCount(aoi: GeoJsonData): ResponseData = {
-    val areaOfInterest = createAOIFromInput(aoi.geometry)
-    val rasterLayer = cropSingleRasterToAOI(nlcdRDD, areaOfInterest)
-    ResponseData(cellCount(Seq(rasterLayer), areaOfInterest))
-  }
-
-  def getSlopePercentageCount(aoi: GeoJsonData): ResponseData = {
-    val areaOfInterest = createAOIFromInput(aoi.geometry)
-    val rasterLayer = cropSingleRasterToAOI(slopeRDD, areaOfInterest)
-    ResponseData(cellCount(Seq(rasterLayer), areaOfInterest))
-  }
-
-  def getSoilGroupCount(aoi: GeoJsonData): ResponseData = {
-    val areaOfInterest = createAOIFromInput(aoi.geometry)
-    val rasterLayer = cropSingleRasterToAOI(soilGroupsRDD, areaOfInterest)
-    ResponseData(cellCount(Seq(rasterLayer), areaOfInterest))
-  }
-
-  def getSoilGroupSlopeCount(aoi: GeoJsonData): ResponseData = {
-    val areaOfInterest = createAOIFromInput(aoi.geometry)
-    val rasterLayers = cropRastersToAOI(List(soilGroupsRDD, slopeRDD), areaOfInterest)
-    ResponseData(cellCount(rasterLayers, areaOfInterest))
-  }
-
-  def getNLCDSlopeCount(aoi: GeoJsonData): ResponseData = {
-    val areaOfInterest = createAOIFromInput(aoi.geometry)
-    val rasterLayers = cropRastersToAOI(List(nlcdRDD, slopeRDD), areaOfInterest)
-    ResponseData(cellCount(rasterLayers, areaOfInterest))
-  }
-
-  def getSoilSlopeKFactor(aoi: GeoJsonData): ResponseDataDouble = {
-    val areaOfInterest = createAOIFromInput(aoi.geometry)
-    val rasterLayers =
-        cropRastersToAOI(List(kFactorRDD, soilGroupsRDD, slopeRDD), areaOfInterest)
-    ResponseDataDouble(cellAverages(rasterLayers, areaOfInterest))
+    val rasterLayer = fetchLocalCroppedPANLCDLayer(areaOfInterest)
+    ResponseData(rddCellCount(rasterLayer, areaOfInterest))
   }
 
   def getPngTile(aoi: GeoJsonData): ResponseData = {
@@ -68,72 +22,79 @@ trait Geoprocessing extends Utils with GeoTiffUtils {
     ResponseData(Map("hello" -> 1))
   }
 
-  private def cellCount(
-    rasterLayers: Seq[TileLayerCollection[SpatialKey]],
+  private def rddCellCount(
+    rasterLayer: RDD[(SpatialKey, Tile)] with Metadata[TileLayerMetadata[SpatialKey]],
     areaOfInterest: MultiPolygon
   ): Map[String, Int] = {
-    val init = () => new LongAdder
-    val update = (_: LongAdder).increment()
-    val metadata = rasterLayers.head.metadata
+    val metadata = rasterLayer.metadata
 
-    val pixelGroups: TrieMap[List[Int], LongAdder] = TrieMap.empty
+    val water = sc.accumulator(0, "11")
+    val snowIce = sc.accumulator(0, "12")
+    val lowRes = sc.accumulator(0, "21")
+    val highRes = sc.accumulator(0, "22")
+    val commercial = sc.accumulator(0, "23")
+    val rock = sc.accumulator(0, "31")
+    val gravelEtc = sc.accumulator(0, "32")
+    val transitional = sc.accumulator(0, "33")
+    val deciduous = sc.accumulator(0, "41")
+    val evergreen = sc.accumulator(0, "42")
+    val mixedForest = sc.accumulator(0, "43")
+    val shrub = sc.accumulator(0, "51")
+    val orchardsEtc = sc.accumulator(0, "61")
+    val grasslands = sc.accumulator(0, "71")
+    val pasture = sc.accumulator(0, "81")
+    val rowCrops = sc.accumulator(0, "82")
+    val smallGrains = sc.accumulator(0, "83")
+    val fallow = sc.accumulator(0, "84")
+    val urbanGrasses = sc.accumulator(0, "85")
+    val woodyWetlands = sc.accumulator(0, "91")
+    val herbaceousWetlands = sc.accumulator(0, "92")
+    val noData = sc.accumulator(0, "noData")
 
-    joinCollectionLayers(rasterLayers).par
-      .foreach({ case (key, tiles) =>
-        val extent = metadata.mapTransform(key)
-        val re = RasterExtent(extent, metadata.layout.tileCols,
-          metadata.layout.tileRows)
+    rasterLayer.foreach({ case (key: SpatialKey, tile: Tile) =>
+      val extent = metadata.mapTransform(key)
+      val re = RasterExtent(extent, metadata.layout.tileCols,
+        metadata.layout.tileRows)
 
-        Rasterizer.foreachCellByMultiPolygon(areaOfInterest, re) { case (col, row) =>
-          val pixelGroup: List[Int] = tiles.map(_.get(col, row)).toList
-          update(pixelGroups.getOrElseUpdate(pixelGroup, init()))
+      Rasterizer.foreachCellByMultiPolygon(areaOfInterest, re) { case (col, row) =>
+        val pixelValue: String = tile.get(col, row).toString
+        pixelValue match {
+          case "11" => water += 1
+          case "12" => snowIce += 1
+          case "21" => lowRes += 1
+          case "22" => highRes += 1
+          case "23" => commercial += 1
+          case "31" => rock += 1
+          case "32" => gravelEtc += 1
+          case "33" => transitional += 1
+          case "41" => deciduous += 1
+          case "42" => evergreen += 1
+          case "43" => mixedForest += 1
+          case "51" => shrub += 1
+          case "61" => orchardsEtc += 1
+          case "71" => grasslands += 1
+          case "81" => pasture += 1
+          case "82" => rowCrops += 1
+          case "83" => smallGrains += 1
+          case "84" => fallow += 1
+          case "85" => urbanGrasses += 1
+          case "91" => woodyWetlands += 1
+          case "92" => herbaceousWetlands += 1
+          case _ => noData += 1
         }
-      })
-
-    val listToString = (l: List[Int]) =>
-        if (l.length == 1) l.head.toString else l.toString
-
-    pixelGroups
-      .map { case (k, v) => listToString(k) -> v.sum.toInt }
-      .toMap
-  }
-
-  private def cellAverages(
-    rasterLayers: Seq[TileLayerCollection[SpatialKey]],
-    areaOfInterest: MultiPolygon
-  ): Map[String, Double] = {
-    val init = () => ( new DoubleAdder, new LongAdder )
-    val update = (newValue: Double, pixelValue: (DoubleAdder, LongAdder)) => {
-      pixelValue match {
-        case (accumulator, counter) => accumulator.add(newValue); counter.increment()
       }
-    }
+    })
 
-    val metadata = rasterLayers.head.metadata
-    val pixelGroups: TrieMap[List[Int], (DoubleAdder, LongAdder)] = TrieMap.empty
-
-    joinCollectionLayers(rasterLayers).par
-      .foreach({ case (key, targetTile :: tiles) =>
-        val extent = metadata.mapTransform(key)
-        val re = RasterExtent(extent, metadata.layout.tileCols,
-            metadata.layout.tileRows)
-
-        Rasterizer.foreachCellByMultiPolygon(areaOfInterest, re) { case (col, row) =>
-          val pixelKey: List[Int] = tiles.map(_.get(col, row)).toList
-          val pixelValues = pixelGroups.getOrElseUpdate(pixelKey, init())
-          val targetLayerData = targetTile.getDouble(col, row)
-
-          val targetLayerValue =
-            if (isData(targetLayerData)) targetLayerData
-            else 0.0
-
-          update(targetLayerValue, pixelValues)
+    List(water, snowIce, lowRes, highRes, commercial, rock, gravelEtc,
+      transitional, deciduous, evergreen, mixedForest, shrub, orchardsEtc,
+      grasslands, pasture, rowCrops, smallGrains, fallow, urbanGrasses,
+      woodyWetlands, herbaceousWetlands, noData)
+      .map { acc =>
+        acc.name match {
+          case Some(n) => (n, acc.value)
+          case None => ("no name", acc.value)
         }
-      })
-
-    pixelGroups
-      .mapValues { case (acc, counter) => acc.sum / counter.sum }
-      .map { case (k, v) => k.toString -> v }
+      }
       .toMap
   }
 }
