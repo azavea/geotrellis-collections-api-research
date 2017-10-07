@@ -8,6 +8,7 @@ import Control from 'react-leaflet-control';
 import L from 'leaflet';
 import esri from 'esri-leaflet';
 import 'leaflet-draw';
+import turfarea from '@turf/area';
 
 import {
     submitAreaOfInterest,
@@ -72,11 +73,14 @@ export default class Map extends Component {
             areaOfInterest,
         } = this.props;
 
+        const aoiSize = areaOfInterest ? turfarea(areaOfInterest) : null;
+
         const dataCard = data || error ? (
             <DataCard
                 data={data}
                 error={error}
                 errorMessage={errorMessage}
+                aoiSize={aoiSize}
             />) : <div />;
 
         const paBoundariesLayer = (

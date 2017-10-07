@@ -1,30 +1,32 @@
 import React, { PropTypes } from 'react';
-import { VictoryBar, VictoryChart, VictoryTheme } from 'victory';
+import { VictoryPie } from 'victory';
 import R from 'ramda';
-
-import {
-    paNLCDMap,
-} from '../constants';
 
 export default function NLCDChart({
     data,
 }) {
-    const chartData = R.map(([x, y]) => ({ y, x }), R.toPairs(data));
+    const chartData =
+        R.reject(({ y }) => y === 0,
+        R.map(([x, y]) => ({ y, x }),
+        R.toPairs(data)));
+
+    const totalCells = R.sum(R.map(({ y }) => y, chartData));
+
+    const renderLabelIfSignificant = ((label, count) => {
+        if (count / totalCells > 0.025) {
+            return label;
+        }
+        return '';
+    });
 
     return (
-        <VictoryChart
-            height={300}
-            width={700}
-            theme={VictoryTheme.grayscale}
-            domainPadding={{ y: 10, x: 140 }}
-        >
-            <VictoryBar
-                style={{ data: { fill: 'tomato' } }}
-                horizontal
-                data={chartData}
-                labels={({ x }) => paNLCDMap[parseInt(x, 10)] || 'Unknown'}
-            />
-        </VictoryChart>
+        <VictoryPie
+            data={chartData}
+            colorScale="qualitative"
+            labels={({ x, y }) => renderLabelIfSignificant(x, y)}
+            height={200}
+            width={200}
+        />
     );
 }
 
