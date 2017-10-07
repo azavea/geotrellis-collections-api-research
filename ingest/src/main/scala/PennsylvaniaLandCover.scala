@@ -53,7 +53,7 @@ object LandCoverIngest {
       val paLandCoverLayerID = LayerId("nlcd-pennsylvania", 0)
 
       FileLayerWriter(localCatalogPath)
-          .write(paLandCoverLayerID, paLandCoverLayer, ZCurveKeyIndexMethod)
+        .write(paLandCoverLayerID, paLandCoverLayer, ZCurveKeyIndexMethod)
     } finally {
         sc.stop()
     }

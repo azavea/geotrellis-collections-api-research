@@ -1,5 +1,3 @@
-// adapted from https://github.com/WikiWatershed/mmw-geoprocessing/blob/develop/api/src/main/scala/Geoprocessing.scala
-
 import geotrellis.raster._
 import geotrellis.raster.rasterize._
 import geotrellis.vector._
@@ -12,14 +10,6 @@ trait Geoprocessing extends Utils {
     val areaOfInterest = createAOIFromInput(aoi.geometry)
     val rasterLayer = fetchLocalCroppedPANLCDLayer(areaOfInterest)
     ResponseData(rddCellCount(rasterLayer, areaOfInterest))
-  }
-
-  def getPngTile(aoi: GeoJsonData): ResponseData = {
-    ResponseData(Map("hello" -> 1))
-  }
-
-  def getGeoTiff(aoi: GeoJsonData): ResponseData = {
-    ResponseData(Map("hello" -> 1))
   }
 
   private def rddCellCount(

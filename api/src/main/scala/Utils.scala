@@ -19,7 +19,7 @@ import spray.json.DefaultJsonProtocol._
 trait Utils {
   val conf = new SparkConf()
       .setIfMissing("spark.master", "local[*]")
-      .setAppName("Read PA NLCD GeoTiff")
+      .setAppName("GeoTrellis collections API research")
       .set("spark.serializer", classOf[KryoSerializer].getName)
       .set("spark.kryo.registrator", classOf[KryoRegistrator].getName)
 
