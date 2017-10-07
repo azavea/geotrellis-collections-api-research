@@ -11,6 +11,8 @@ import {
     FAIL_PING_API,
     CLEAR_API_ERROR,
     CLEAR_DATA,
+    START_DRAWING,
+    STOP_DRAWING,
 } from './actions';
 
 import {
@@ -26,6 +28,7 @@ const initAppPageState = {
     pong: true,
     sendingPing: false,
     areaOfInterest: null,
+    drawingActive: false,
 };
 
 export default function appPage(state = initAppPageState, { type, payload }) {
@@ -36,6 +39,7 @@ export default function appPage(state = initAppPageState, { type, payload }) {
                 fetching: true,
                 error: false,
                 errorMessage: null,
+                drawingActive: false,
                 areaOfInterest: payload,
             });
         case COMPLETE_SUBMIT_AOI:
@@ -84,6 +88,14 @@ export default function appPage(state = initAppPageState, { type, payload }) {
             return Object.assign({}, state, {
                 pong: false,
                 sendingPing: false,
+            });
+        case START_DRAWING:
+            return Object.assign({}, state, {
+                drawingActive: true,
+            });
+        case STOP_DRAWING:
+            return Object.assign({}, state, {
+                drawingActive: false,
             });
         default:
             return state;

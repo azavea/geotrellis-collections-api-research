@@ -16,7 +16,6 @@ module.exports = {
             'react-dom',
             'react-leaflet',
             'react-leaflet-control',
-            'react-leaflet-draw',
             'react-redux',
             'react-router',
             'react-router-redux',

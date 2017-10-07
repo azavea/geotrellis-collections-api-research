@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import {
     pingApiEndpoint,
+    startDrawing,
+    stopDrawing,
 } from './actions';
 
 import Map from './Map';
@@ -21,13 +23,21 @@ class App extends Component {
             pong,
             error,
             errorMessage,
+            drawingActive,
+            areaOfInterest,
         } = this.props;
+
+        const drawButtonAction = drawingActive ?
+            () => dispatch(stopDrawing()) :
+            () => dispatch(startDrawing());
 
         return (
             <div>
                 <Header
                     pingSuccessful={pong}
                     pingApi={() => dispatch(pingApiEndpoint())}
+                    drawingActive={drawingActive}
+                    drawButtonAction={drawButtonAction}
                 />
                 <div id="full-screen-map">
                     <Map
@@ -36,6 +46,8 @@ class App extends Component {
                         selectedApiEndpoint={selectedApiEndpoint}
                         error={error}
                         errorMessage={errorMessage}
+                        drawingActive={drawingActive}
+                        areaOfInterest={areaOfInterest}
                     />
                 </div>
             </div>
@@ -52,6 +64,7 @@ App.propTypes = {
     selectedApiEndpoint: PropTypes.string.isRequired,
     pong: PropTypes.bool.isRequired,
     areaOfInterest: PropTypes.object,
+    drawingActive: PropTypes.bool,
 };
 
 function mapStateToProps({
@@ -62,6 +75,8 @@ function mapStateToProps({
         errorMessage,
         selectedApiEndpoint,
         pong,
+        drawingActive,
+        areaOfInterest,
     },
 }) {
     return {
@@ -71,6 +86,8 @@ function mapStateToProps({
         selectedApiEndpoint,
         pong,
         errorMessage,
+        drawingActive,
+        areaOfInterest,
     };
 }
 

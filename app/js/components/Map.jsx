@@ -1,18 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import {
     Map as ReactLeafletMap,
-    FeatureGroup,
     ZoomControl,
     GeoJSON,
 } from 'react-leaflet';
 import Control from 'react-leaflet-control';
-import { EditControl } from 'react-leaflet-draw';
-import R from 'ramda';
+import L from 'leaflet';
 import esri from 'esri-leaflet';
+import 'leaflet-draw';
 
 import {
     submitAreaOfInterest,
-    clearAreaOfInterest,
     clearAPIError,
     clearData,
 } from './actions';
@@ -31,8 +29,6 @@ export default class Map extends Component {
     constructor(props) {
         super(props);
         this.onCreate = this.onCreate.bind(this);
-        this.onDelete = this.onDelete.bind(this);
-        this.clearShapes = this.clearShapes.bind(this);
     }
 
     componentDidMount() {
@@ -48,31 +44,28 @@ export default class Map extends Component {
         esri.basemapLayer('Imagery').addTo(leafletMap);
 
         leafletMap.on('draw:drawstart', () => {
-            this.clearShapes();
             dispatch(clearData());
             dispatch(clearAPIError());
         });
+
+        leafletMap.on('draw:created', this.onCreate);
+
+        this.polygonDrawHandler = new L.Draw.Polygon(leafletMap);
     }
 
-    componentWillReceiveProps({ selectedApiEndpoint }) {
+    componentWillReceiveProps({ selectedApiEndpoint, drawingActive }) {
         if (selectedApiEndpoint !== this.props.selectedApiEndpoint) {
             this.clearShapes();
+        }
+        if (drawingActive) {
+            this.polygonDrawHandler.enable();
+        } else {
+            this.polygonDrawHandler.disable();
         }
     }
 
     onCreate({ layer }) {
         this.props.dispatch(submitAreaOfInterest(layer.toGeoJSON()));
-    }
-
-    onDelete() {
-        this.props.dispatch(clearAreaOfInterest());
-    }
-
-    clearShapes() {
-        if (this.drawnShapes) {
-            R.forEach(l => { this.map.leafletElement.removeLayer(l); },
-                this.drawnShapes.leafletElement.getLayers());
-        }
     }
 
     render() {
@@ -82,6 +75,7 @@ export default class Map extends Component {
             selectedApiEndpoint,
             error,
             errorMessage,
+            areaOfInterest,
         } = this.props;
 
         const dataCard = data || error ? (
@@ -105,6 +99,12 @@ export default class Map extends Component {
             />
         );
 
+        const areaOfInterestLayer = areaOfInterest ? (
+            <GeoJSON
+                data={areaOfInterest}
+                style={{ fill: false, color: '#1E90FF' }}
+            />) : null;
+
         return (
             <ReactLeafletMap
                 center={defaultMapCenter}
@@ -113,25 +113,8 @@ export default class Map extends Component {
                 ref={l => { this.map = l; }}
             >
                 {paBoundariesLayer}
+                {areaOfInterestLayer}
                 <ZoomControl position="topright" />
-                <FeatureGroup
-                    ref={f => { this.drawnShapes = f; }}
-                >
-                    <EditControl
-                        position="topright"
-                        onCreated={this.onCreate}
-                        onDeleted={this.onDelete}
-                        draw={{
-                            circle: false,
-                            marker: false,
-                            polyline: false,
-                            rectangle: false,
-                        }}
-                        edit={{
-                            edit: false,
-                        }}
-                    />
-                </FeatureGroup>
                 <Control position="bottomleft">
                     {dataCard}
                 </Control>
@@ -147,4 +130,6 @@ Map.propTypes = {
     selectedApiEndpoint: PropTypes.string.isRequired,
     error: PropTypes.bool,
     errorMessage: PropTypes.string,
+    drawingActive: PropTypes.bool.isRequired,
+    areaOfInterest: PropTypes.object,
 };

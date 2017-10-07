@@ -17,6 +17,8 @@ export const COMPLETE_PING_API = 'COMPLETE_PING_API';
 export const FAIL_PING_API = 'FAIL_PING_API';
 export const CLEAR_API_ERROR = 'CLEAR_API_ERROR';
 export const CLEAR_DATA = 'CLEAR_DATA';
+export const START_DRAWING = 'START_DRAWING';
+export const STOP_DRAWING = 'STOP_DRAWING';
 
 let cancelAxiosRequest = null;
 
@@ -123,5 +125,20 @@ export function pingApiEndpoint() {
         axios.get(`${apiServerURL}/ping`)
             .then(() => dispatch(completePingApi()))
             .catch(() => dispatch(failPingApi()));
+    };
+}
+
+export function startDrawing() {
+    return (dispatch) => {
+        dispatch(clearAreaOfInterest());
+        dispatch({
+            type: START_DRAWING,
+        });
+    };
+}
+
+export function stopDrawing() {
+    return {
+        type: STOP_DRAWING,
     };
 }
