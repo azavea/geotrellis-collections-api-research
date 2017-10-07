@@ -9,8 +9,3 @@ export function coalesceData(acc, [key, value]) {
         [key]: acc[key] ? acc[key] + value : value,
     });
 }
-
-export function splitKey(key) {
-    return R.map(x => parseInt(x, 10), R.split(',',
-        R.replace(/List/, '', key).slice(1, -1)));
-}

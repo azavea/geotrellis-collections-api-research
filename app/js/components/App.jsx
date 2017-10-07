@@ -19,7 +19,6 @@ class App extends Component {
         const {
             data,
             dispatch,
-            selectedApiEndpoint,
             pong,
             error,
             errorMessage,
@@ -43,7 +42,6 @@ class App extends Component {
                     <Map
                         data={data}
                         dispatch={dispatch}
-                        selectedApiEndpoint={selectedApiEndpoint}
                         error={error}
                         errorMessage={errorMessage}
                         drawingActive={drawingActive}
@@ -61,7 +59,6 @@ App.propTypes = {
     fetching: PropTypes.bool,
     error: PropTypes.bool,
     errorMessage: PropTypes.string,
-    selectedApiEndpoint: PropTypes.string.isRequired,
     pong: PropTypes.bool.isRequired,
     areaOfInterest: PropTypes.object,
     drawingActive: PropTypes.bool,
@@ -73,7 +70,6 @@ function mapStateToProps({
         fetching,
         error,
         errorMessage,
-        selectedApiEndpoint,
         pong,
         drawingActive,
         areaOfInterest,
@@ -83,7 +79,6 @@ function mapStateToProps({
         data,
         fetching,
         error,
-        selectedApiEndpoint,
         pong,
         errorMessage,
         drawingActive,

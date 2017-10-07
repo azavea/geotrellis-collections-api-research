@@ -5,7 +5,6 @@ import {
     COMPLETE_SUBMIT_AOI,
     FAIL_SUBMIT_AOI,
     CLEAR_AOI,
-    CHANGE_API_ENDPOINT,
     START_PING_API,
     COMPLETE_PING_API,
     FAIL_PING_API,
@@ -68,12 +67,6 @@ export default function appPage(state = initAppPageState, { type, payload }) {
                 data: null,
                 error: false,
                 areaOfInterest: null,
-            });
-        case CHANGE_API_ENDPOINT:
-            return Object.assign({}, state, {
-                selectedApiEndpoint: payload,
-                data: null,
-                error: false,
             });
         case START_PING_API:
             return Object.assign({}, state, {

@@ -3,7 +3,7 @@ import { VictoryBar, VictoryChart, VictoryTheme } from 'victory';
 import R from 'ramda';
 
 import {
-    nlcdMap,
+    paNLCDMap,
 } from '../constants';
 
 export default function NLCDChart({
@@ -22,7 +22,7 @@ export default function NLCDChart({
                 style={{ data: { fill: 'tomato' } }}
                 horizontal
                 data={chartData}
-                labels={({ x }) => nlcdMap[parseInt(x, 10)] || 'Unknown'}
+                labels={({ x }) => paNLCDMap[parseInt(x, 10)] || 'Unknown'}
             />
         </VictoryChart>
     );

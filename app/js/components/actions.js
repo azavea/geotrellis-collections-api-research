@@ -94,13 +94,6 @@ export function submitAreaOfInterest(aoi) {
     };
 }
 
-export function changeApiEndpoint(payload) {
-    return {
-        type: CHANGE_API_ENDPOINT,
-        payload,
-    };
-}
-
 function startPingApi() {
     return {
         type: START_PING_API,

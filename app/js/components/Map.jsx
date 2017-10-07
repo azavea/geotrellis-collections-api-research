@@ -23,7 +23,6 @@ import {
 import pennsylvaniaBoundaries from '../pennsylvaniaBoundaries';
 
 import DataCard from './DataCard';
-import OptionsCard from './OptionsCard';
 
 export default class Map extends Component {
     constructor(props) {
@@ -53,10 +52,7 @@ export default class Map extends Component {
         this.polygonDrawHandler = new L.Draw.Polygon(leafletMap);
     }
 
-    componentWillReceiveProps({ selectedApiEndpoint, drawingActive }) {
-        if (selectedApiEndpoint !== this.props.selectedApiEndpoint) {
-            this.clearShapes();
-        }
+    componentWillReceiveProps({ drawingActive }) {
         if (drawingActive) {
             this.polygonDrawHandler.enable();
         } else {
@@ -71,8 +67,6 @@ export default class Map extends Component {
     render() {
         const {
             data,
-            dispatch,
-            selectedApiEndpoint,
             error,
             errorMessage,
             areaOfInterest,
@@ -83,14 +77,7 @@ export default class Map extends Component {
                 data={data}
                 error={error}
                 errorMessage={errorMessage}
-                selectedApiEndpoint={selectedApiEndpoint}
             />) : <div />;
-
-        const optionsCard = (
-            <OptionsCard
-                dispatch={dispatch}
-                selectedApiEndpoint={selectedApiEndpoint}
-            />);
 
         const paBoundariesLayer = (
             <GeoJSON
@@ -114,11 +101,10 @@ export default class Map extends Component {
             >
                 {paBoundariesLayer}
                 {areaOfInterestLayer}
-                <ZoomControl position="topright" />
                 <Control position="bottomleft">
                     {dataCard}
                 </Control>
-                {optionsCard}
+                <ZoomControl position="bottomright" />
             </ReactLeafletMap>
         );
     }
@@ -127,7 +113,6 @@ export default class Map extends Component {
 Map.propTypes = {
     data: PropTypes.object,
     dispatch: PropTypes.func.isRequired,
-    selectedApiEndpoint: PropTypes.string.isRequired,
     error: PropTypes.bool,
     errorMessage: PropTypes.string,
     drawingActive: PropTypes.bool.isRequired,
