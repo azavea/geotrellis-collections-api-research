@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import { object } from 'prop-types';
 import { VictoryPie } from 'victory';
 import R from 'ramda';
 
@@ -31,5 +32,5 @@ export default function NLCDChart({
 }
 
 NLCDChart.propTypes = {
-    data: PropTypes.object,
+    data: object,
 };

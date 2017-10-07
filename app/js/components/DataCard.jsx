@@ -1,5 +1,5 @@
-import React, { PropTypes } from 'react';
-
+import React from 'react';
+import { bool, number, object, string } from 'prop-types';
 import NLCDChart from './NLCDChart';
 
 function displayAoiSize(size) {
@@ -53,8 +53,8 @@ export default function DataCard({
 }
 
 DataCard.propTypes = {
-    data: PropTypes.object,
-    error: PropTypes.bool,
-    errorMessage: PropTypes.string,
-    aoiSize: PropTypes.number,
+    data: object,
+    error: bool,
+    errorMessage: string,
+    aoiSize: number,
 };

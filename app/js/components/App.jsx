@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import { bool, func, object, string } from 'prop-types';
 import { connect } from 'react-redux';
 
 import {
@@ -54,14 +55,14 @@ class App extends Component {
 }
 
 App.propTypes = {
-    dispatch: PropTypes.func.isRequired,
-    data: PropTypes.object,
-    fetching: PropTypes.bool,
-    error: PropTypes.bool,
-    errorMessage: PropTypes.string,
-    pong: PropTypes.bool.isRequired,
-    areaOfInterest: PropTypes.object,
-    drawingActive: PropTypes.bool,
+    dispatch: func.isRequired,
+    data: object,
+    fetching: bool,
+    error: bool,
+    errorMessage: string,
+    pong: bool.isRequired,
+    areaOfInterest: object,
+    drawingActive: bool,
 };
 
 function mapStateToProps({

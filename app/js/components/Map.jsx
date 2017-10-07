@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import { bool, func, object, string } from 'prop-types';
 import {
     Map as ReactLeafletMap,
     ZoomControl,
@@ -115,10 +116,10 @@ export default class Map extends Component {
 }
 
 Map.propTypes = {
-    data: PropTypes.object,
-    dispatch: PropTypes.func.isRequired,
-    error: PropTypes.bool,
-    errorMessage: PropTypes.string,
-    drawingActive: PropTypes.bool.isRequired,
-    areaOfInterest: PropTypes.object,
+    data: object,
+    dispatch: func.isRequired,
+    error: bool,
+    errorMessage: string,
+    drawingActive: bool.isRequired,
+    areaOfInterest: object,
 };

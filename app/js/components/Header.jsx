@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import { bool, func } from 'prop-types';
 
 export default function Header({
     pingSuccessful,
@@ -54,8 +55,8 @@ export default function Header({
 }
 
 Header.propTypes = {
-    pingSuccessful: PropTypes.bool.isRequired,
-    pingApi: PropTypes.func.isRequired,
-    drawingActive: PropTypes.bool.isRequired,
-    drawButtonAction: PropTypes.func.isRequired,
+    pingSuccessful: bool.isRequired,
+    pingApi: func.isRequired,
+    drawingActive: bool.isRequired,
+    drawButtonAction: func.isRequired,
 };

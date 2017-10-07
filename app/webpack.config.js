@@ -17,8 +17,6 @@ module.exports = {
             'react-leaflet',
             'react-leaflet-control',
             'react-redux',
-            'react-router',
-            'react-router-redux',
             'redux',
             'redux-devtools',
             'redux-logger',
