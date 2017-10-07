@@ -55,24 +55,6 @@ object Server extends Geoprocessing {
               }
             }
           }
-        } ~
-        path("panlcdpngtile") {
-          entity(as[GeoJsonData]) { shape =>
-            complete {
-              Future {
-                getPngTile(shape).toJson
-              }
-            }
-          }
-        } ~
-        path("panlcdgeotiff") {
-          entity(as[GeoJsonData]) { shape =>
-            complete {
-              Future {
-                getGeoTiff(shape).toJson
-              }
-            }
-          }
         }
       }
     }

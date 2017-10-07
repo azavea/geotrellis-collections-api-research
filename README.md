@@ -17,30 +17,18 @@ A research project to set up and use GeoTrellis as a REST service.
 
 #### Setup
 
-Clone the project, ensure Docker's running, then run:
+After cloning the project, you'll need to [download the NLCD Pennsylvania 1992](http://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=339), unzip it and save the `.tif` file in `./ingest/land-cover-data/geotiff`.
+
+After copying the geotiff, make sure that Docker's running, then run
 
 ```sh
 make
 ```
 
-This will build the app client & compile the API service.
-
-#### Data
-
-To run the API you'll need credentials for accessing Azavea's raster data sets.
-Set them by running `aws configure --profile <PROFILE>` where `<PROFILE>`
-represents your credentials.
-
-To ingest the NLCD Pennslvania 1992 dataset, [download the file](http://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=339), unzip it and save the `.tif` file in `./ingest/land-cover-data/geotiff`, then run
-
-```sh
-make ingest
-```
+This will build the app client, compile the API service, ingest the geotiff data as an RDD, and start the app and API servers.
 
 Note that this command requires that you have Spark installed locally with
 `spark-submit` on your path.
-
-The resulting RDD will save to `./ingest/land-cover-data/catalog`.
 
 #### Server
 
@@ -65,14 +53,7 @@ Each of these API endpoints accepts a polygon geometry object posted from the cl
 
 | Path | Service |
 | --- | --- |
-| `/nlcdcount` | Returns NLCD cell counts arranged by type for AOI |
-| `/slopepercentagecount` | Returns slope percentage cell counts |
-| `/soilgroupcount` | Returns SSUGRO hydrologic soil groups |
-| `/soilgroupslopecount` | Returns cell counts for paired soil groups & slope percentages |
-| `/nlcdslopecount` | Returns cell counts for paired NLCD & slope percentages |
-| `/soilslopekfactor` | Returns average k factor for paired soil types & slope percentages |
-| `/nlcdpngtile` | Returns an AOI-shaped PNG tile representing NLCD cell counts |
-| `/soilgeotiff` | Returns an AOI-shaped GeoTiff representing soil count values |
+| `/panlcdcount` | Returns NLCD cell counts arranged by type for AOI |
 
 ### Make rules
 
