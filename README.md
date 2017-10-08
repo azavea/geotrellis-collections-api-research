@@ -9,9 +9,9 @@ A research project to set up and use GeoTrellis as a REST service.
 ### Requirements
 
 * Make
-* Docker
-* sbt
-* Spark
+* [Docker](https://store.docker.com/search?offering=community&type=edition)
+* [sbt](http://www.scala-sbt.org/download.html)
+* [Spark 2.x](https://spark.apache.org/downloads.html)
 
 ### Getting started
 
