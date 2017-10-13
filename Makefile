@@ -2,7 +2,7 @@
 
 .PHONY: build bundle-app compile-app app-server api-server app-console \
 	api-console assembly compile server setup restart ingest-assembly ingest \
-	compile-ingest
+	compile-ingest download-tif
 
 build:
 	docker-compose -f docker-compose.yml run --rm --no-deps app yarn
@@ -34,7 +34,11 @@ restart: api-server
 
 server: app-server api-server
 
-setup: build ingest server
+setup: build ingest
+
+download-tif:
+	curl -o ./ingest/land-cover-data/geotiff/nlcd_pa.tif \
+	https://azavea-research-public-data.s3.amazonaws.com/geotrellis/samples/nlcd_pa.tif
 
 ingest-assembly:
 	bash -c "trap 'cd ..' EXIT; cd ingest; sbt assembly"
@@ -42,7 +46,7 @@ ingest-assembly:
 compile-ingest:
 	bash -c "trap 'cd ..' EXIT; cd ingest; sbt compile"
 
-ingest: ingest-assembly
+ingest: ingest-assembly download-tif
 	bash -c "trap 'cd ..' EXIT; cd ingest; spark-submit --name \"NLCDPA Ingest\" \
 	--master \"local[*]\" --driver-memory 4G \
 	target/scala-2.11/geotrellis_collections_api_ingest-assembly-1.0.jar"

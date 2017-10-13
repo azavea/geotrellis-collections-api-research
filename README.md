@@ -9,26 +9,29 @@ A research project to set up and use GeoTrellis as a REST service.
 ### Requirements
 
 * Make
+* curl
 * [Docker](https://store.docker.com/search?offering=community&type=edition)
 * [sbt](http://www.scala-sbt.org/download.html)
 * [Spark 2.x](https://spark.apache.org/downloads.html)
+
+To ingest the geotiff data used in the app, you'll also need to ensure that you've got `spark-submit` on your local path.
 
 ### Getting started
 
 #### Setup
 
-After cloning the project, you'll need to [download the NLCD Pennsylvania 1992](http://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=339), unzip it and save the `.tif` file in `./ingest/land-cover-data/geotiff`.
-
-After copying the geotiff, make sure that Docker's running, then run
+Clone the project, make sure that Docker's running, then run:
 
 ```sh
 make
 ```
 
-This will build the app client, compile the API service, ingest the geotiff data as an RDD, and start the app and API servers.
+This will
 
-Note that this command requires that you have Spark installed locally with
-`spark-submit` on your path.
+- build the app client
+- compile the API service
+- [download a geotiff representing 1992 NLCD values for Pennsylvania](http://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=339)
+- ingest the geotiff as an RDD for GeoTrellis
 
 #### Server
 
@@ -65,4 +68,5 @@ Each of these API endpoints accepts a polygon geometry object posted from the cl
 | `make api-console` | Log into API with `./sbt console` |
 | `make restart` | Start API with `./sbt ~reStart` |
 | `make server` | Start app container & API service |
+| `make download-tif` | Download a geotiff of 1992 NLCD data for Pennsylvania |
 | `make ingest` | Ingest Pennsylvania NLCD GeoTiff into GeoTrellis RDD |
