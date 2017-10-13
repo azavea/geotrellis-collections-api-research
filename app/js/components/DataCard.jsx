@@ -2,10 +2,12 @@ import React from 'react';
 import { bool, number, object, string } from 'prop-types';
 import NLCDChart from './NLCDChart';
 
+const metersPerSqKm = 10000000;
+
 function displayAoiSize(size) {
-    return (size < 10000) ?
+    return (size < metersPerSqKm) ?
         `${Math.round(size)} square meters` :
-        `${Math.round(size / 1000)} square kilometers`;
+        `${Math.round(size / metersPerSqKm)} square kilometers`;
 }
 
 export default function DataCard({
