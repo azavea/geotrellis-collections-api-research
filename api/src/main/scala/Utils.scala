@@ -17,23 +17,15 @@ import spray.json._
 import spray.json.DefaultJsonProtocol._
 
 trait Utils {
-  val conf = new SparkConf()
-      .setIfMissing("spark.master", "local[*]")
-      .setAppName("GeoTrellis collections API research")
-      .set("spark.serializer", classOf[KryoSerializer].getName)
-      .set("spark.kryo.registrator", classOf[KryoRegistrator].getName)
-
-  implicit val sc = new SparkContext(conf)
-
   val localCatalogPath =
       new java.io.File(new java.io.File(".").getCanonicalFile,
         "../ingest/land-cover-data/catalog").getAbsolutePath
-  val localFileReader = FileLayerReader(localCatalogPath)
+  val localFileReader = FileCollectionLayerReader(localCatalogPath)
   val paNLCDLayerID = LayerId("nlcd-pennsylvania", 0)
 
   def fetchLocalCroppedPANLCDLayer(
     shape: MultiPolygon
-  ): RDD[(SpatialKey, Tile)] with Metadata[TileLayerMetadata[SpatialKey]] =
+  ): TileLayerCollection[SpatialKey] =
     localFileReader
       .query[SpatialKey, Tile, TileLayerMetadata[SpatialKey]](paNLCDLayerID)
       .where(Intersects(shape))
