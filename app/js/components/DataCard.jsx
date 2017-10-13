@@ -6,8 +6,8 @@ const metersPerSqKm = 10000000;
 
 function displayAoiSize(size) {
     return (size < metersPerSqKm) ?
-        `${Math.round(size)} square meters` :
-        `${Math.round(size / metersPerSqKm)} square kilometers`;
+        `${Math.round(size).toLocaleString()} square meters` :
+        `${Math.round(size / metersPerSqKm).toLocaleString()} square kilometers`;
 }
 
 export default function DataCard({
