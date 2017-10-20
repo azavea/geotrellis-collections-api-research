@@ -7,6 +7,5 @@ services:
             - "9555:9555"
         volumes:
             - ./app:/usr/src/app
-            - ~/.node_cache/geotrellis-collections-api-research-node-modules:/usr/src/app/node_modules
         command:
             yarn run start
