@@ -6,7 +6,6 @@ import geotrellis.raster.rasterize._
 import geotrellis.vector._
 import geotrellis.vector.io._
 import geotrellis.spark._
-import org.apache.spark.rdd.RDD
 
 trait Geoprocessing extends Utils {
   def getPANLCDCount(aoi: GeoJsonData): ResponseData = {

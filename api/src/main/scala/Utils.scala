@@ -1,18 +1,10 @@
 import geotrellis.proj4.{CRS, ConusAlbers, LatLng}
 import geotrellis.raster._
-import geotrellis.raster.resample._
 import geotrellis.spark._
-import geotrellis.spark.tiling._
 import geotrellis.spark.io._
 import geotrellis.spark.io.file._
-import geotrellis.spark.io.hadoop._
-import geotrellis.spark.io.kryo.KryoRegistrator
 import geotrellis.vector._
 import geotrellis.vector.io._
-import org.apache.spark._
-import org.apache.spark.rdd.RDD
-import org.apache.spark.serializer.KryoSerializer
-import org.apache.spark.HashPartitioner
 import spray.json._
 import spray.json.DefaultJsonProtocol._
 
