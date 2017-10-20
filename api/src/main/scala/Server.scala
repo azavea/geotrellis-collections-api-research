@@ -2,15 +2,11 @@ import scala.concurrent._
 import scala.concurrent.Future
 import ExecutionContext.Implicits.global
 
-import akka.actor.ActorSystem
-import akka.http.scaladsl.Http
-import akka.http.scaladsl.model._
-import akka.http.scaladsl.server.Directives._
-import akka.stream.ActorMaterializer
 import akka.http.scaladsl.unmarshalling.Unmarshaller._
+import akka.http.scaladsl.server.{HttpApp, Route}
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import spray.json._
-import spray.json.DefaultJsonProtocol._
+import com.typesafe.config.ConfigFactory
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
 import org.apache.log4j.Logger
 
@@ -22,17 +18,11 @@ object RequestResponseProtocol extends DefaultJsonProtocol {
   implicit val responseFormat = jsonFormat1(ResponseData)
 }
 
-object Server extends Geoprocessing {
+object Server extends HttpApp with App with Geoprocessing {
   import RequestResponseProtocol._
   val logger = Logger.getLogger(this.getClass.getName)
 
-  def main(args: Array[String]) {
-    implicit val system = ActorSystem("geotrellis-research-api-server")
-    implicit val materializer = ActorMaterializer()
-
-    implicit val blockingDispatcher = system.dispatchers.lookup("my-blocking-dispatcher")
-
-    val route = cors() {
+  def route: Route = cors() {
       get {
         path("ping") {
           entity(as[String]) { _ =>
@@ -57,6 +47,9 @@ object Server extends Geoprocessing {
       }
     }
 
-    val bindingFuture = Http().bindAndHandle(route, "0.0.0.0", 7000)
-  }
+  val config = ConfigFactory.load()
+  val port = config.getInt("geoprocessing-server.port")
+  val host = config.getString("geoprocessing-server.host")
+
+  startServer(host, port)
 }
