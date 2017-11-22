@@ -11,6 +11,7 @@ A research project to set up and use GeoTrellis as a REST service.
 * Make
 * curl
 * [Docker](https://store.docker.com/search?offering=community&type=edition)
+* [java](http://openjdk.java.net/)
 * [sbt](http://www.scala-sbt.org/download.html)
 * [Spark 2.x](https://spark.apache.org/downloads.html)
 
