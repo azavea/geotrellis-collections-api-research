@@ -90,7 +90,7 @@ export function submitAreaOfInterest(aoi) {
              .then(({ data }) => dispatch(completeSubmitAreaOfInterest(data)))
              .catch(() => dispatch(failSubmitAreaOfInterest('API error')));
 
-        return () => {};
+        return null;
     };
 }
 
