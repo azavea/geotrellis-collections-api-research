@@ -18,3 +18,4 @@ project/plugins/src_managed
 project/plugins/project
 nlcd_pa.tif
 ingest/land-cover-data/catalog
+ingest/land-cover-data/tiles
