@@ -50,7 +50,10 @@ compile-ingest:
 
 ingest: ingest-assembly download-tif
 ifeq (,$(wildcard ./ingest/land-cover-data/catalog/attributes/nlcd-pennsylvania__.__0__.__metadata.json))
-	bash -c "trap 'cd ..' EXIT; cd ingest; spark-submit --name \"NLCDPA Ingest\" \
-	--master \"local[*]\" --driver-memory 4G \
-	target/scala-2.11/geotrellis_collections_api_ingest-assembly-1.0.jar"
+	bash -c "trap 'cd ..' EXIT; cd ingest; spark-submit \
+		--name \"NLCDPA Ingest\" \
+		--master \"local[*]\" \
+		--driver-memory 4G \
+		--class LandCoverIngest \
+		target/scala-2.11/geotrellis_collections_api_ingest-assembly-1.0.jar"
 endif
