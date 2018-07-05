@@ -17,5 +17,4 @@ project/plugins/target
 project/plugins/src_managed
 project/plugins/project
 nlcd_pa.tif
-land_cover_data/attributes
-land_cover_data/nlcd-pennsylvania
+ingest/land-cover-data/catalog
