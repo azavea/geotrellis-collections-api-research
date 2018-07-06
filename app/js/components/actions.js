@@ -19,6 +19,7 @@ export const CLEAR_API_ERROR = 'CLEAR_API_ERROR';
 export const CLEAR_DATA = 'CLEAR_DATA';
 export const START_DRAWING = 'START_DRAWING';
 export const STOP_DRAWING = 'STOP_DRAWING';
+export const TOGGLE_LAYER = 'TOGGLE_LAYER';
 
 let cancelAxiosRequest = null;
 
@@ -133,5 +134,11 @@ export function startDrawing() {
 export function stopDrawing() {
     return {
         type: STOP_DRAWING,
+    };
+}
+
+export function toggleLayer() {
+    return {
+        type: TOGGLE_LAYER,
     };
 }

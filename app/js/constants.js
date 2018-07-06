@@ -34,3 +34,5 @@ export const paNLCDMap = {
     92: 'Herbacious wetlands',
     noData: 'Unknown',
 };
+
+export const paNLCDtiles = '/tiles/nlcd-pennsylvania/{z}/{x}/{y}.png';
