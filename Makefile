@@ -34,7 +34,7 @@ restart: api-server
 
 server: app-server api-server
 
-setup: build ingest
+setup: build paint
 
 download-tif:
 ifeq (,$(wildcard ./ingest/land-cover-data/geotiff/nlcd_pa.tif))
