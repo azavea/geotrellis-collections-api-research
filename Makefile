@@ -67,3 +67,9 @@ ifeq (,$(wildcard ./ingest/land-cover-data/tiles/nlcd-pennsylvania/0/0/0.png))
 		--class LandCoverPaint \
 		target/scala-2.11/geotrellis_collections_api_ingest-assembly-1.0.jar"
 endif
+
+clean:
+	bash -c "trap 'cd ..' EXIT; cd ingest; \
+		rm -f land-cover-data/geotiff/nlcd_pa.tif; \
+		rm -rf land-cover-data/catalog/*; \
+		rm -rf land-cover-data/tiles/*"

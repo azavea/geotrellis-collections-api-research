@@ -73,3 +73,4 @@ Each of these API endpoints accepts a polygon geometry object posted from the cl
 | `make download-tif` | Download a geotiff of 1992 NLCD data for Pennsylvania |
 | `make ingest` | Ingest Pennsylvania NLCD GeoTiff into GeoTrellis RDD |
 | `make paint` | Paint Pennsylvania NCLD tiles from RDD |
+| `make clean` | Remove downloaded geotiff, generated RDD, generated tiles |
