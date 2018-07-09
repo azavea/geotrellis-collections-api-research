@@ -6,6 +6,8 @@ export default function Header({
     pingApi,
     drawingActive,
     drawButtonAction,
+    layerActive,
+    toggleLayer,
 }) {
     const pingIconCSS = pingSuccessful ? 'pt-icon-feed' : 'pt-icon-offline';
 
@@ -25,6 +27,8 @@ export default function Header({
         };
     })();
 
+    const layerActiveCSS = layerActive ? 'active' : '';
+
     return (
         <nav className="pt-navbar pt-dark pt-fixed-top">
             <div className="pt-navbar-group pt-align-left">
@@ -39,6 +43,11 @@ export default function Header({
                 </div>
             </div>
             <div className="pt-navbar-group pt-align-right">
+                <button
+                    className={`pt-button pt-minimal pt-icon-layer ${layerActiveCSS}`}
+                    onClick={toggleLayer}
+                    title="Enable Painted Layer"
+                />
                 <button
                     className={`pt-button pt-minimal ${drawIconCSS}`}
                     onClick={drawButtonAction}
@@ -59,4 +68,6 @@ Header.propTypes = {
     pingApi: func.isRequired,
     drawingActive: bool.isRequired,
     drawButtonAction: func.isRequired,
+    layerActive: bool.isRequired,
+    toggleLayer: func.isRequired,
 };

@@ -33,6 +33,7 @@ This will
 - compile the API service
 - [download a geotiff representing 1992 NLCD values for Pennsylvania](http://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=339)
 - ingest the geotiff as an RDD for GeoTrellis
+- paint tiles of the geotiff from the RDD
 
 #### Server
 
@@ -71,3 +72,5 @@ Each of these API endpoints accepts a polygon geometry object posted from the cl
 | `make server` | Start app container & API service |
 | `make download-tif` | Download a geotiff of 1992 NLCD data for Pennsylvania |
 | `make ingest` | Ingest Pennsylvania NLCD GeoTiff into GeoTrellis RDD |
+| `make paint` | Paint Pennsylvania NCLD tiles from RDD |
+| `make clean` | Remove downloaded geotiff, generated RDD, generated tiles |

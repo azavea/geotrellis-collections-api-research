@@ -12,6 +12,7 @@ import {
     CLEAR_DATA,
     START_DRAWING,
     STOP_DRAWING,
+    TOGGLE_LAYER,
 } from './actions';
 
 import {
@@ -28,6 +29,7 @@ const initAppPageState = {
     sendingPing: false,
     areaOfInterest: null,
     drawingActive: false,
+    layerActive: false,
 };
 
 export default function appPage(state = initAppPageState, { type, payload }) {
@@ -89,6 +91,10 @@ export default function appPage(state = initAppPageState, { type, payload }) {
         case STOP_DRAWING:
             return Object.assign({}, state, {
                 drawingActive: false,
+            });
+        case TOGGLE_LAYER:
+            return Object.assign({}, state, {
+                layerActive: !state.layerActive,
             });
         default:
             return state;

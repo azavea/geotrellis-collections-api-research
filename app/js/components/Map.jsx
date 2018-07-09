@@ -20,6 +20,7 @@ import {
 import {
     defaultMapCenter,
     defaultZoomLevel,
+    paNLCDtiles,
 } from '../constants';
 
 import pennsylvaniaBoundaries from '../pennsylvaniaBoundaries';
@@ -52,13 +53,22 @@ export default class Map extends Component {
         leafletMap.on('draw:created', this.onCreate);
 
         this.polygonDrawHandler = new L.Draw.Polygon(leafletMap);
+        this.tileLayer = L.tileLayer(paNLCDtiles);
     }
 
-    componentWillReceiveProps({ drawingActive }) {
+    componentWillReceiveProps({ drawingActive, layerActive }) {
         if (drawingActive) {
             this.polygonDrawHandler.enable();
         } else {
             this.polygonDrawHandler.disable();
+        }
+
+        if (this.map) {
+            if (layerActive) {
+                this.map.leafletElement.addLayer(this.tileLayer);
+            } else {
+                this.map.leafletElement.removeLayer(this.tileLayer);
+            }
         }
     }
 
@@ -122,4 +132,5 @@ Map.propTypes = {
     errorMessage: string,
     drawingActive: bool.isRequired,
     areaOfInterest: object,
+    layerActive: bool.isRequired,
 };

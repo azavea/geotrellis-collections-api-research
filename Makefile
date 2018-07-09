@@ -34,11 +34,13 @@ restart: api-server
 
 server: app-server api-server
 
-setup: build ingest
+setup: build paint
 
 download-tif:
+ifeq (,$(wildcard ./ingest/land-cover-data/geotiff/nlcd_pa.tif))
 	curl -o ./ingest/land-cover-data/geotiff/nlcd_pa.tif \
 	https://azavea-research-public-data.s3.amazonaws.com/geotrellis/samples/nlcd_pa.tif
+endif
 
 ingest-assembly:
 	bash -c "trap 'cd ..' EXIT; cd ingest; sbt assembly"
@@ -47,6 +49,27 @@ compile-ingest:
 	bash -c "trap 'cd ..' EXIT; cd ingest; sbt compile"
 
 ingest: ingest-assembly download-tif
-	bash -c "trap 'cd ..' EXIT; cd ingest; spark-submit --name \"NLCDPA Ingest\" \
-	--master \"local[*]\" --driver-memory 4G \
-	target/scala-2.11/geotrellis_collections_api_ingest-assembly-1.0.jar"
+ifeq (,$(wildcard ./ingest/land-cover-data/catalog/attributes/nlcd-pennsylvania__.__0__.__metadata.json))
+	bash -c "trap 'cd ..' EXIT; cd ingest; spark-submit \
+		--name \"NLCDPA Ingest\" \
+		--master \"local[*]\" \
+		--driver-memory 4G \
+		--class LandCoverIngest \
+		target/scala-2.11/geotrellis_collections_api_ingest-assembly-2.0.jar"
+endif
+
+paint: ingest
+ifeq (,$(wildcard ./ingest/land-cover-data/tiles/nlcd-pennsylvania/0/0/0.png))
+	bash -c "trap 'cd ..' EXIT; cd ingest; spark-submit \
+		--name \"Paint PA Land Cover Tiles\" \
+		--master \"local[*]\" \
+		--driver-memory 4G \
+		--class LandCoverPaint \
+		target/scala-2.11/geotrellis_collections_api_ingest-assembly-2.0.jar"
+endif
+
+clean:
+	bash -c "trap 'cd ..' EXIT; cd ingest; \
+		rm -f land-cover-data/geotiff/nlcd_pa.tif; \
+		rm -rf land-cover-data/catalog/*; \
+		rm -rf land-cover-data/tiles/*"

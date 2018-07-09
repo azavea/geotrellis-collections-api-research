@@ -6,6 +6,7 @@ import {
     pingApiEndpoint,
     startDrawing,
     stopDrawing,
+    toggleLayer,
 } from './actions';
 
 import Map from './Map';
@@ -25,6 +26,7 @@ class App extends Component {
             errorMessage,
             drawingActive,
             areaOfInterest,
+            layerActive,
         } = this.props;
 
         const drawButtonAction = drawingActive ?
@@ -38,6 +40,8 @@ class App extends Component {
                     pingApi={() => dispatch(pingApiEndpoint())}
                     drawingActive={drawingActive}
                     drawButtonAction={drawButtonAction}
+                    layerActive={layerActive}
+                    toggleLayer={() => dispatch(toggleLayer())}
                 />
                 <div id="full-screen-map">
                     <Map
@@ -47,6 +51,7 @@ class App extends Component {
                         errorMessage={errorMessage}
                         drawingActive={drawingActive}
                         areaOfInterest={areaOfInterest}
+                        layerActive={layerActive}
                     />
                 </div>
             </div>
@@ -63,6 +68,7 @@ App.propTypes = {
     pong: bool.isRequired,
     areaOfInterest: object,
     drawingActive: bool,
+    layerActive: bool,
 };
 
 function mapStateToProps({
@@ -74,6 +80,7 @@ function mapStateToProps({
         pong,
         drawingActive,
         areaOfInterest,
+        layerActive,
     },
 }) {
     return {
@@ -84,6 +91,7 @@ function mapStateToProps({
         errorMessage,
         drawingActive,
         areaOfInterest,
+        layerActive,
     };
 }
 

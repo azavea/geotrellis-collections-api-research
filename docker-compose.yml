@@ -7,5 +7,6 @@ services:
             - "9555:9555"
         volumes:
             - ./app:/usr/src/app
+            - ./ingest/land-cover-data/tiles:/usr/src/app/tiles
         command:
             yarn run start
