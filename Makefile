@@ -59,9 +59,11 @@ ifeq (,$(wildcard ./ingest/land-cover-data/catalog/attributes/nlcd-pennsylvania_
 endif
 
 paint: ingest
+ifeq (,$(wildcard ./ingest/land-cover-data/tiles/nlcd-pennsylvania/0/0/0.png))
 	bash -c "trap 'cd ..' EXIT; cd ingest; spark-submit \
 		--name \"Paint PA Land Cover Tiles\" \
 		--master \"local[*]\" \
 		--driver-memory 4G \
 		--class LandCoverPaint \
 		target/scala-2.11/geotrellis_collections_api_ingest-assembly-1.0.jar"
+endif
