@@ -55,7 +55,7 @@ ifeq (,$(wildcard ./ingest/land-cover-data/catalog/attributes/nlcd-pennsylvania_
 		--master \"local[*]\" \
 		--driver-memory 4G \
 		--class LandCoverIngest \
-		target/scala-2.11/geotrellis_collections_api_ingest-assembly-1.0.jar"
+		target/scala-2.11/geotrellis_collections_api_ingest-assembly-2.0.jar"
 endif
 
 paint: ingest
@@ -65,7 +65,7 @@ ifeq (,$(wildcard ./ingest/land-cover-data/tiles/nlcd-pennsylvania/0/0/0.png))
 		--master \"local[*]\" \
 		--driver-memory 4G \
 		--class LandCoverPaint \
-		target/scala-2.11/geotrellis_collections_api_ingest-assembly-1.0.jar"
+		target/scala-2.11/geotrellis_collections_api_ingest-assembly-2.0.jar"
 endif
 
 clean:

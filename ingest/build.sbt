@@ -2,7 +2,7 @@ enablePlugins(JavaAppPackaging)
 
 name := "geotrellis_collections_api_ingest"
 organization := ""
-version := "1.0"
+version := "2.0"
 scalaVersion := "2.11.11"
 javaOptions := Seq("-Xmx3072m", "-Xms2048m")
 
