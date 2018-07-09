@@ -8,12 +8,16 @@ javaOptions := Seq("-Xmx3072m", "-Xms2048m")
 
 scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
 
+resolvers ++= Seq(
+  "locationtech-releases" at "https://repo.locationtech.org/content/groups/releases"
+)
+
 libraryDependencies ++= {
   val scalaTestV  = "3.0.1"
   Seq(
     "org.scalatest"     %% "scalatest" % scalaTestV % "test",
-    "org.locationtech.geotrellis" %% "geotrellis-spark" % "2.0.0-RC1",
-    "org.locationtech.geotrellis" %% "geotrellis-s3" % "2.0.0-RC1",
+    "org.locationtech.geotrellis" %% "geotrellis-spark" % "2.0.0-RC2",
+    "org.locationtech.geotrellis" %% "geotrellis-s3" % "2.0.0-RC2",
     "org.apache.spark" %% "spark-core" % "2.3.0"
   )
 }
